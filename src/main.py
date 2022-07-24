@@ -1,7 +1,8 @@
 import pygame
 
-from menu import Menu
-from scene import Scene
+from scenes.menu import Menu
+from scenes.scene import Scene
+from scenes.scenes_manager import SCENES_MAP
 
 # Setting up the window
 pygame.init()
@@ -11,40 +12,46 @@ pygame.display.set_caption("BugsLand")
 FPS = 60
 
 
-should_run = True
+# setting up current scene
+current_scene: Scene = None
 
 
-def stop_running():
-    global should_run
-    should_run = False
-
-
-current_scene: Scene = Menu(stop_running)
-
-
-def switch_scene(new_scene: Scene):
+def switch_scene(new_scene: str):
+    global current_scene
     if current_scene.exit() == True:
-        current_scene = new_scene()
+        next_scene = SCENES_MAP.get(new_scene)
+        current_scene = next_scene(switch_scene)
         return True
+    else:
+        print("Unable to Switch Scenes !!!")
     return False
+
+
+current_scene = Menu(switch_scene)
 
 
 def main():
     """main loop for the game"""
     clock = pygame.time.Clock()
-    while should_run:
+    while True:
         # locking FPS
         clock.tick(FPS)
+
+        # pygame.event.get() removes the events in the queue and returns them inside a list.
+        # events once removed from the queue cannot be accessed in a later call to pygame.event.get()
+        # so we pass the events to the update method of the current scene
+        events_list = pygame.event.get()
+        for event in events_list:
+            # for closing the game
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
 
         # Rendering Everything
         current_scene.render()
 
         # Updating Everything
-        current_scene.update()
-
-    if current_scene.scene_ended != True:
-        current_scene.exit()
-    pygame.quit()
+        current_scene.update(events_list)
 
 
 if __name__ == "__main__":
