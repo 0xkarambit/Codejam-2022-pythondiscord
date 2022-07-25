@@ -1,6 +1,6 @@
 import pygame
-
 from components.button import Button
+from components.player import Player
 from scenes.scene import Scene
 
 WIDTH, HEIGHT = 800, 600
@@ -23,17 +23,18 @@ class Circle_scene(Scene):
             lambda: switch_scene("Menu"),
             self.screen,
         )
+        self.player = Player(100, 100, 50, 50, pygame.Color(254, 89, 0))
 
     def render(self):
         self.back_btn.render()
         center = (WIDTH / 2, HEIGHT / 2)
         blue = pygame.Color(12, 32, 43)
         pygame.draw.circle(self.screen, blue, center, 300, 0)
-
-        pygame.display.update()
+        self.player.render(self.screen)
 
     def update(self, events_list):
         self.back_btn.update(events_list)
+        self.player.update(events_list)
 
     def exit(self):
         print("Scene Game Over !")

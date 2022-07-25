@@ -1,5 +1,4 @@
 import pygame
-
 from scenes.menu import Menu
 from scenes.scene import Scene
 from scenes.scenes_manager import SCENES_MAP
@@ -47,8 +46,15 @@ def main():
                 pygame.quit()
                 exit()
 
+        # clearing screen for the next render
+        white = (255, 255, 255)
+        WIN.fill(white)
+
         # Rendering Everything
         current_scene.render()
+
+        # updating the display
+        pygame.display.update()
 
         # Updating Everything
         current_scene.update(events_list)

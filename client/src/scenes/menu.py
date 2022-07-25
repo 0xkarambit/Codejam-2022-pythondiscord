@@ -1,9 +1,4 @@
-# from dataclasses import dataclass
-from typing import Callable
-
 import pygame
-
-# components
 from components.button import Button
 from scenes.scene import Scene
 
@@ -15,7 +10,7 @@ pygame.font.init()
 
 
 class Menu(Scene):
-    def __init__(self, switch_scene: Callable[[], bool]):
+    def __init__(self, switch_scene):
         print("Menu scene started")
         self.screen_surface = pygame.display.get_surface()
         self.scene_ended = False
@@ -38,10 +33,6 @@ class Menu(Scene):
         ]
 
     def render(self):
-        white = (255, 255, 255)
-        self.screen_surface.fill(white)
-        # screen_surface.blits
-
         for btn in self.buttons:
             btn.render()
 
