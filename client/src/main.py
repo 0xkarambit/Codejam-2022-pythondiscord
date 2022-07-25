@@ -1,3 +1,4 @@
+import sys
 import pygame
 
 from scenes.menu import Menu
@@ -18,7 +19,7 @@ current_scene: Scene = None
 
 def switch_scene(new_scene: str):
     global current_scene
-    if current_scene.exit() == True:
+    if current_scene.exit():
         next_scene = SCENES_MAP.get(new_scene)
         current_scene = next_scene(switch_scene)
         return True

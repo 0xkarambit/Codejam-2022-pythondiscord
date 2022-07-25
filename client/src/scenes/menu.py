@@ -32,7 +32,7 @@ class Menu(Scene):
                 48,
                 pygame.Color(123, 243, 145),
                 pygame.Color(223, 143, 45),
-                lambda: switch_scene("Circle_scene"),
+                lambda: switch_scene("Gameplay"),
                 self.screen_surface,
             )
         ]
