@@ -5,6 +5,8 @@ import uuid
 from os.path import exists
 from typing import Callable
 
+uid = None
+
 if exists("uid_details.txt"):
     with open("uid_details.txt", "r") as file:
         uid = int(file.read().strip())

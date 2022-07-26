@@ -1,12 +1,22 @@
-from time import sleep
+import asyncio
+import threading
 
 import pygame
+import websockets
+from connection import authenticate, searching
 from constants import HEIGHT, WIDTH
 from scenes.scene import Scene
 
-WHITE = pygame.Color(255, 255, 255)
+
+# socket = None
+async def load():
+    async with websockets.connect("ws://localhost:8765") as ws:
+        await authenticate(ws)
+        await searching(ws, lambda m: print(f"joining room {m}"))
+
 
 pygame.font.init()
+WHITE = pygame.Color(255, 255, 255)
 
 
 class Loading_screen(Scene):
@@ -16,7 +26,6 @@ class Loading_screen(Scene):
     ):
         print("Scene Loading_screen starts !")
         self.switch_scene = switch_scene
-        # self.next_scene = None
         self.screen = pygame.display.get_surface()
         self.scene_ended = False
         # writing Loading on the screen
@@ -54,8 +63,14 @@ class Loading_screen(Scene):
         self.frame_interval = 4  # animation interval in frames
         self.frame_counter = 0
 
-        self.next_scene = "Circle_scene"
-        self.has_loaded = False
+        # self.next_scene = "Circle_scene"
+        # self.has_loaded = False
+
+        self.thread = threading.Thread(
+            target=asyncio.get_event_loop().run_until_complete, args=[load()]
+        )  # doesnt work for async functions
+        self.thread.daemon = True
+        self.thread.start()
 
     def render(self):
         self.screen.fill(pygame.Color(0, 0, 0))
@@ -66,6 +81,11 @@ class Loading_screen(Scene):
             pygame.draw.rect(self.screen, WHITE, bar_rect, 0)
 
     def update(self, events_list):
+
+        if not self.thread.is_alive():
+            print("CLOSED THE THREAD")
+            self.switch_scene("Circle_scene")
+
         self.frame_counter += 1
         if self.frame_counter > self.frame_interval:
             self.frame_counter = 0
@@ -78,12 +98,10 @@ class Loading_screen(Scene):
                 elif bar_rect.height >= self.bar_h:
                     self.delta_h[i] = -self.delta_h[i]
 
-        # if self.has_loaded:
-        #     self.switch_scene(self.next_scene)
-
     def exit(self):
         print("Scene Loading_screen Over !")
         # To disable the timer for an event, set the milliseconds argument to 0.
         # pygame.time.set_timer(self.UPDATE_BARS, 0)
         self.scene_ended = True
+        # destroy thread can't
         return True
