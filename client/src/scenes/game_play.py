@@ -42,6 +42,9 @@ class gamePlay(Scene):
 
         self.level.run()
 
+        if self.level.death() == True:
+            self.level = Level(level_map, self.screen)
+
 
         # pygame final display renderer
         pygame.display.update()
