@@ -19,15 +19,15 @@ class Player:
 
         # TODO : tweak physics values
         # movement physics
-        self.JUMP = 5
-        self.ACCELERATION = 3
+        self.JUMP = 30
+        self.ACCELERATION = 2
         self.ACC_DOWN = 10
 
         self.FRICTION = 0.5  # shouldnt this come from a world object ?
         # self.DRAG = 2  # shouldnt this come from a world object ?
         self.GRAVITY = 2  # shouldnt this come from a world object ?
 
-        self.MAX_VEL = 60
+        self.MAX_VEL = 10
 
         self.vel_x = 0
         self.vel_y = 0
@@ -73,8 +73,6 @@ class Player:
             if key == "s" and is_down:
                 # only add if the Player is not on ground !
                 self.vel_y += self.ACC_DOWN
-
-        print(self.vel_y)
 
         self.apply_friction()
         self.apply_gravity()  # todo somethings fishy

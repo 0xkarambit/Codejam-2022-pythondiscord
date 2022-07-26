@@ -1,9 +1,7 @@
 import pygame
 from components.button import Button
+from constants import HEIGHT, WIDTH
 from scenes.scene import Scene
-
-# BAD multile sources of truth
-WIDTH, HEIGHT = 800, 600
 
 # kinda bad ? YEAHHH
 pygame.font.init()

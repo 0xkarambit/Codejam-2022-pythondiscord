@@ -1,9 +1,8 @@
 import pygame
 from components.button import Button
 from components.player import Player
+from constants import HEIGHT, WIDTH
 from scenes.scene import Scene
-
-WIDTH, HEIGHT = 800, 600
 
 
 class Circle_scene(Scene):

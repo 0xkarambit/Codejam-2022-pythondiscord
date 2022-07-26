@@ -1,14 +1,13 @@
 import pygame
+from constants import FPS, HEIGHT, WIDTH
 from scenes.menu import Menu
 from scenes.scene import Scene
 from scenes.scenes_manager import SCENES_MAP
 
 # Setting up the window
 pygame.init()
-WIDTH, HEIGHT = 800, 600
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("BugsLand")
-FPS = 60
 
 
 # setting up current scene
