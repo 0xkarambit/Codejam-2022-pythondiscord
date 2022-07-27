@@ -1,39 +1,47 @@
 import pygame
-
-from tiles import Tile
-from settings import tile_size, _screenWidht, _screenHeight
+from camera import Camera
 from player import Player
+from pytmx import util_pygame
+from settings import _screenHeight, _screenWidht
+from tiles import Tile
 
-
-# DECLARE LEVEL CLASS
 
 class Level:
-    def __init__(self, level_data, surface):
+    def __init__(self, surface):
 
         # PROPS OF LEVEL CLASS
         self.display_surface = surface
-        self.setup_level(level_data)
+        self.setup_level()
         self.world_shift = 0
+        # Camera
+        self.camera = Camera()
 
     # CLASS METHOD TO IDENTIFY REQ TILES FOR LEVEL
-    def setup_level(self, layout):
+    def setup_level(self):
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
 
-        # USE ENUMERATE TO GET VALUE AND INDEX OF ARRAY
-        for row_index, row in enumerate(layout):
-            for col_index, cell in enumerate(row):
+        tmx_data = util_pygame.load_pygame("./Levels/1.tmx")
+        self.bg_color = tmx_data.background_color
 
-                x = col_index * tile_size
-                y = row_index * tile_size
+        tiles_layer = tmx_data.get_layer_by_name("Tile Layer 1")
+        for x, y, surf in tiles_layer.tiles():
+            pos = (x * surf.get_width(), y * surf.get_height())  # 16 by 16 tiles
+            tile = Tile(pos, surf, self.tiles)
+            self.tiles.add(tile)
 
-                if cell == "1":
-                    tile = Tile((x, y), tile_size)
-                    self.tiles.add(tile)
-
-                if cell == "P":
-                    player_sprite = Player((x, y))
-                    self.player.add(player_sprite)
+        player_layer = tmx_data.get_layer_by_name("Player")
+        for obj in player_layer:
+            pos = (obj.x, obj.y)
+            if obj.image:
+                p = Player(pos, obj.image)
+                self.player.add(p)
+            else:
+                path = obj.properties.get("sprites")
+                print(path)
+                img = pygame.image.load(path)
+                p = Player(pos, img)
+                self.player.add(p)
 
     def scroll_x(self):
         player = self.player.sprite
@@ -103,16 +111,31 @@ class Level:
         if player.rect.y > _screenHeight:
             return True
 
-    # CLASS METHOD TO DRAW ALL TILES
-    def run(self):
+    def render(self):
+        # background
+        self.display_surface.fill(self.bg_color)
+        # drawing tiles relative to camera
+        for tile in self.tiles.sprites():
+            # tiles are looped rowwise
+            if tile.rect.x > self.camera.pos.x and tile.rect.x < (
+                self.camera.pos.x + self.camera.draw_distance.x
+            ):
+                pos = pygame.Vector2(tile.rect.x, tile.rect.y)
+                rel_pos = self.camera.get_relative_coors(pos)
+                rel_rect = tile.image.get_rect(topleft=rel_pos)
+                self.display_surface.blit(tile.image, rel_rect)
 
-        # LEVEL TILE
+        # drawing player relative to camera
+        p = self.player.sprite
+        p_pos = pygame.Vector2(p.rect.x, p.rect.y)
+        p_rel_pos = self.camera.get_relative_coors(p_pos)
+        p_rel_rect = p.image.get_rect(topleft=p_rel_pos)
+        p_img = p.image
+        self.display_surface.blit(p_img, p_rel_rect)
+
+    def update(self, events_list):
         self.tiles.update(self.world_shift)
-        self.tiles.draw(self.display_surface)
-        self.scroll_x()
-
-        # PLAYER DRAW
         self.player.update()
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
-        self.player.draw(self.display_surface)
+        self.camera.follow_player(self.player.sprite)

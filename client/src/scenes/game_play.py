@@ -1,12 +1,11 @@
 import pygame
-
-from level import Level
-from settings import level_map, _screenWidht, _screenHeight
 from components.button import Button
+from level import Level
 from scenes.scene import Scene
+from settings import _screenHeight, _screenWidht
+
 
 class gamePlay(Scene):
-
     def __init__(self, switch_scene):
         # debug
         print("Init Gameplay Screen")
@@ -14,12 +13,13 @@ class gamePlay(Scene):
         _screenReso = (_screenWidht, _screenHeight)
 
         # create screen and init clock
-        self.screen = pygame.display.set_mode(_screenReso)
+        # self.screen = pygame.display.set_mode(_screenReso, pygame.RESIZABLE)
+        self.screen = pygame.display.set_mode(_screenReso, pygame.SCALED)
 
         # self.screen = pygame.display.get_surface()
         self.scene_ended = False
 
-        self.level = Level(level_map, self.screen)
+        self.level = Level(self.screen)
 
         self.back_btn = Button(
             50,
@@ -36,21 +36,21 @@ class gamePlay(Scene):
 
     def render(self):
         # Fill screen black
-        self.screen.fill('black')
+        self.screen.fill("black")
 
         self.back_btn.render()
 
-        self.level.run()
-
-        if self.level.death() == True:
-            self.level = Level(level_map, self.screen)
-
+        self.level.render()
 
         # pygame final display renderer
         pygame.display.update()
 
     def update(self, events_list):
         self.back_btn.update(events_list)
+        self.level.update(events_list)
+        if self.level.death() == True:
+            # todo reset camera
+            self.level = Level(self.screen)
 
     def exit(self):
         self.scene_ended = True

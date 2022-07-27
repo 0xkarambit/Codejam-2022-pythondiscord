@@ -2,7 +2,7 @@ import sys
 
 import pygame
 from constants import FPS, HEIGHT, WIDTH
-from scenes.menu import Menu
+from scenes.game_play import gamePlay
 from scenes.scene import Scene
 from scenes.scenes_manager import SCENES_MAP
 
@@ -27,7 +27,7 @@ def switch_scene(new_scene: str):
     return False
 
 
-current_scene = Menu(switch_scene)
+current_scene = gamePlay(switch_scene)
 
 
 def main():

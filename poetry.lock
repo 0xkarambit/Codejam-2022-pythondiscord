@@ -215,6 +215,14 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "pytmx"
+version = "3.31"
+description = "Loads tiled tmx maps"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
 name = "pyyaml"
 version = "6.0"
 description = "YAML parser and emitter for Python"
@@ -283,7 +291,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "3.10.*"
-content-hash = "a842203503a4348ca0691c08cedee67609e1ef921b9fe463f6385b2c7b372201"
+content-hash = "8c7691995eb50da74ad8a8c4e83874734cd1408015e4c61d936eb9f3b3110a83"
 
 [metadata.files]
 black = [
@@ -442,6 +450,10 @@ pygame = [
     {file = "pygame-2.1.2-pp37-pypy37_pp73-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:7fdb93b4282962c9a2ebf1af994ee698be823dd913218ed97a5f2fb372b10b66"},
     {file = "pygame-2.1.2-pp37-pypy37_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1fddec8829e96424800c806582d73a5173b7d48946cccf7d035839ca09850db8"},
     {file = "pygame-2.1.2.tar.gz", hash = "sha256:d6d0eca28f886f0477cd0721ac688189155a587f2bb8eae740e52ca56c3ad23c"},
+]
+pytmx = [
+    {file = "PyTMX-3.31-py3-none-any.whl", hash = "sha256:8d572fa8889236879e19351f99f425a0df905105f8503d77470746c386befd05"},
+    {file = "PyTMX-3.31.tar.gz", hash = "sha256:ead258771640c82029c6fef53661464163e791e729b7e63def53e1bd85e4efe8"},
 ]
 pyyaml = [
     {file = "PyYAML-6.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:d4db7c7aef085872ef65a8fd7d6d09a14ae91f691dec3e87ee5ee0539d516f53"},
