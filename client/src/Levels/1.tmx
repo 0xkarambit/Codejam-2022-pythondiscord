@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="150" height="23" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#e2e2e2" nextlayerid="5" nextobjectid="3">
  <tileset firstgid="1" name="Terrain (16x16)" tilewidth="16" tileheight="16" tilecount="242" columns="22">
-  <image source="Pixel_Adventure_1/Free/Terrain/Terrain (16x16).png" width="352" height="176"/>
+  <image source="../../assets/Pixel_Adventure_1/Free/Terrain/Terrain (16x16).png" width="352" height="176"/>
  </tileset>
  <tileset firstgid="243" name="tileset" tilewidth="16" tileheight="16" tilecount="72" columns="12">
-  <image source="platform_metroidvania_asset_pack_v1.01/platform_metroidvania asset pack v1.01/tiles and background_foreground (new)/tileset.png" width="192" height="96"/>
+  <image source="../../assets/platform_metroidvania_asset_pack v1.01/tiles and background_foreground (new)/tileset.png" width="192" height="96"/>
  </tileset>
  <tileset firstgid="315" name="waterfall_anim_strip_4" tilewidth="16" tileheight="16" tilecount="4" columns="4">
-  <image source="platform_metroidvania_asset_pack_v1.01/platform_metroidvania asset pack v1.01/tiles and background_foreground (new)/waterfall_anim_strip_4.png" width="64" height="24"/>
+  <image source="../../assets/platform_metroidvania_asset_pack v1.01/tiles and background_foreground (new)/waterfall_anim_strip_4.png" width="64" height="24"/>
  </tileset>
  <tileset firstgid="319" name="Idle" tilewidth="16" tileheight="16" tilecount="1" columns="1">
-  <image source="Pixel_Adventure_1/Free/Traps/Spikes/Idle.png" width="16" height="16"/>
+  <image source="../../assets/Pixel_Adventure_1/Free/Traps/Spikes/Idle.png" width="16" height="16"/>
  </tileset>
  <layer id="1" name="Tile Layer 1" width="150" height="23">
   <data encoding="csv">
@@ -69,7 +69,7 @@
  <objectgroup id="4" name="Player">
   <object id="2" name="player" x="96" y="96" width="16" height="16">
    <properties>
-    <property name="sprites" value="C:/Users/harsj/Downloads/platform_metroidvania_asset_pack_v1.01/platform_metroidvania asset pack v1.01/herochar sprites(new)/herochar_idle_anim.gif"/>
+    <property name="sprites" type="file" value="../../assets/platform_metroidvania_asset_pack v1.01/herochar sprites(new)/herochar_idle_anim.gif"/>
    </properties>
   </object>
  </objectgroup>

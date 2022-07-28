@@ -1,3 +1,5 @@
+import os
+
 import pygame
 from camera import Camera
 from player import Player
@@ -21,7 +23,10 @@ class Level:
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
 
-        tmx_data = util_pygame.load_pygame("./Levels/1.tmx")
+        if os.getcwd().endswith("\\client\\src"):
+            os.chdir("./Levels")  # todo replace with a better solution
+
+        tmx_data = util_pygame.load_pygame("./1.tmx")
         self.bg_color = tmx_data.background_color
 
         tiles_layer = tmx_data.get_layer_by_name("Tile Layer 1")
