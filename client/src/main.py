@@ -1,5 +1,7 @@
 import pygame
 from constants import FPS, HEIGHT, WIDTH
+
+# from settings import FPS, _screenHeight, _screenWidth
 from scenes.game_play import gamePlay
 from scenes.menu import Menu
 from scenes.scene import Scene

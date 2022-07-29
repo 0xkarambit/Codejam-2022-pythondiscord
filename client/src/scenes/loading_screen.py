@@ -4,8 +4,8 @@ import threading
 import pygame
 import websockets
 from connection import authenticate, searching
-from constants import HEIGHT, WIDTH
 from scenes.scene import Scene
+from settings import _screenHeight, _screenWidth
 
 
 # socket = None
@@ -39,8 +39,8 @@ class Loading_screen(Scene):
         x_padding = 80
         y_padding = 65
 
-        x = WIDTH - t_w - x_padding
-        y = HEIGHT - t_h - y_padding
+        x = _screenWidth - t_w - x_padding
+        y = _screenHeight - t_h - y_padding
 
         self.text_rect = pygame.Rect(x, y, 10, 10)
 

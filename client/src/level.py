@@ -1,10 +1,11 @@
 import os
 
 import pygame
+from background import Background
 from camera import Camera
 from player import Player
 from pytmx import util_pygame
-from settings import _screenHeight, _screenWidht
+from settings import TILE_W, _screenHeight, _screenWidth
 from tiles import Tile
 
 
@@ -20,6 +21,7 @@ class Level:
 
     def reset(self):
         self.setup_level()
+        self.background.reset()
         self.camera = Camera()
 
     def load_map(self):
@@ -29,6 +31,11 @@ class Level:
 
         self.tmx_data = util_pygame.load_pygame("./1.tmx")
         self.has_loaded = True
+
+        # print(self.tmx_data.get_layer_by_name("Background"))
+        self.bg_layer = self.tmx_data.get_layer_by_name("Background")
+
+        self.background = Background([self.bg_layer], [2])
 
         # os.chdir("./..")  # reseting the cwd
 
@@ -111,12 +118,14 @@ class Level:
 
     def render(self):
         # background
-        self.display_surface.fill(self.bg_color)
+        self.background.render(self.display_surface)
         # drawing tiles relative to camera
+
         for tile in self.tiles.sprites():
             # tiles are looped rowwise
-            if tile.rect.x > self.camera.pos.x and tile.rect.x < (
-                self.camera.pos.x + self.camera.draw_distance.x
+            if (
+                tile.rect.x >= self.camera.pos.x - self.camera.offset
+                and tile.rect.x < (self.camera.pos.x + self.camera.draw_distance.x)
             ):
                 pos = pygame.Vector2(tile.rect.x, tile.rect.y)
                 rel_pos = self.camera.get_relative_coors(pos)
@@ -138,3 +147,5 @@ class Level:
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
         self.camera.follow_player(self.player.sprite)
+        # print(self.camera.pos)
+        self.background.update(self.camera.pos.x)

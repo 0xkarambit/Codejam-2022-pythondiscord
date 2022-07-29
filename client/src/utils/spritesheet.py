@@ -46,6 +46,8 @@ class Spritesheet:
 
         # to be used during locked animations | animations that cannot be interrupted
         self.locked = False
+        # for queuing animation
+        self.next_animation = ""
 
     def update(self) -> None:
         """incrementes the frame_counter and the animation_frames
@@ -63,33 +65,24 @@ class Spritesheet:
 
             if self.animation_index >= self.select_animation_len:
                 self.animation_index = 0
+                if self.next_animation != "":
+                    self.select_animation(self.next_animation, forced=True)
+                    self.next_animation = ""
                 return (True, True)
             return (True, False)
         return (False, False)
 
-    def switch_animation(self, animation: str, inverted=False):
-        # works seemless doesnt reset fc or animation_index !
+    def queue_animation(self, animation: str, inverted: bool = False):
         animation = animation + "_inverted" if inverted else animation
-
-        # if self.locked:
-        #     return False
-
-        # dont switch/reset animation if its the one going on !
-        if self.selected_animation == animation:
-            return False
-
         if animation in self.animation_names:
-            self.selected_animation = animation
-            self.select_animation_len = self.animations[animation].get("length")
-        else:
-            raise Exception(
-                f"No such animation {animation} exists on spritesheet {self.filename}"
-            )
+            self.next_animation = animation
 
-    def select_animation(self, animation: str, inverted=False):
+    def select_animation(
+        self, animation: str, inverted=False, *, forced=False, noreset=False
+    ):
         animation = animation + "_inverted" if inverted else animation
 
-        if self.locked:
+        if self.locked and not forced:
             # print("ANIMATION SEQUENCE HAS BEEN LOCKED")
             return False
 
@@ -100,8 +93,9 @@ class Spritesheet:
         if animation in self.animation_names:
             self.selected_animation = animation
             self.select_animation_len = self.animations[animation].get("length")
-            self.fc = 0
-            self.animation_index = 0
+            if not noreset:
+                self.fc = 0
+                self.animation_index = 0
         else:
             raise Exception(
                 f"No such animation {animation} exists on spritesheet {self.filename}"

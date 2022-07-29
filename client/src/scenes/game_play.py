@@ -2,7 +2,7 @@ import pygame
 from components.button import Button
 from level import Level
 from scenes.scene import Scene
-from settings import _screenHeight, _screenWidht
+from settings import _screenHeight, _screenWidth
 
 
 class gamePlay(Scene):
@@ -10,11 +10,12 @@ class gamePlay(Scene):
         # debug
         print("Init Gameplay Screen")
 
-        _screenReso = (_screenWidht, _screenHeight)
+        _screenReso = (_screenWidth, _screenHeight)
 
         # create screen and init clock
         # self.screen = pygame.display.set_mode(_screenReso, pygame.RESIZABLE)
         self.screen = pygame.display.set_mode(_screenReso, pygame.SCALED)
+        # self.screen = pygame.display.set_mode(_screenReso)
 
         # self.screen = pygame.display.get_surface()
         self.scene_ended = False

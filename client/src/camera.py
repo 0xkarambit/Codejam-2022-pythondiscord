@@ -13,7 +13,7 @@ class Camera:
     def __init__(self):
         self.pos = pygame.Vector2(0, 0)
         draw_dist_x = 30
-        draw_dist_y = 22
+        draw_dist_y = 30  # todo change this it looks awesome !
         # the amount of pixels the camera draws
         self.draw_distance = pygame.Vector2(draw_dist_x * TILE_W, draw_dist_y * TILE_H)
         # when the player is this much distance away from the camera borders the camera will move
@@ -23,6 +23,8 @@ class Camera:
         # the camera is not to move after this point is reached
         X_LIMIT = MAP_H - self.draw_distance.y
         Y_LIMIT = MAP_W - self.draw_distance.x
+        # to avoid the black glitchy effect on the left side
+        self.offset = 2 * TILE_W
 
     def follow_player(self, player):
         """Updates camera position in the required direction
