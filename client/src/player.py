@@ -23,11 +23,11 @@ class Player(pygame.sprite.Sprite):
         # print("self.in_air_after_jump", self.in_air_after_jump)
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             self.direction.x = 1
             self.spritesheet.select_animation("run_anim")
 
-        elif keys[pygame.K_LEFT]:
+        elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.direction.x = -1
             self.spritesheet.select_animation("run_anim", True)
 
@@ -36,7 +36,7 @@ class Player(pygame.sprite.Sprite):
             if not self.in_air_after_jump:
                 self.spritesheet.select_animation("idle_anim")
 
-        if keys[pygame.K_UP]:
+        if keys[pygame.K_UP] or keys[pygame.K_SPACE] or keys[pygame.K_w]:
             if self.jump_limit < 15:
                 self.jump()
 

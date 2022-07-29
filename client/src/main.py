@@ -1,8 +1,7 @@
-import sys
-
 import pygame
 from constants import FPS, HEIGHT, WIDTH
 from scenes.game_play import gamePlay
+from scenes.menu import Menu
 from scenes.scene import Scene
 from scenes.scenes_manager import SCENES_MAP
 
@@ -20,6 +19,8 @@ def switch_scene(new_scene: str):
     global current_scene
     if current_scene.exit():
         next_scene = SCENES_MAP.get(new_scene)
+        if not next_scene:
+            raise Exception(f"Scene {new_scene} not found")
         current_scene = next_scene(switch_scene)
         return True
     else:
@@ -27,7 +28,7 @@ def switch_scene(new_scene: str):
     return False
 
 
-current_scene = gamePlay(switch_scene)
+current_scene = Menu(switch_scene)
 
 
 def main():

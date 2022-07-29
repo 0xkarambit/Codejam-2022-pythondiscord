@@ -13,4 +13,7 @@ SCENES_MAP: Dict[str, Scene] = {
     "Circle_scene": Circle_scene,
     "Loading_screen": Loading_screen,
     "Gameplay": gamePlay,
+    #uncomment  when the pages are ready
+    # "About": todo,
+    # "Credits": Credits,
 }

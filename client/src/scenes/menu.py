@@ -1,5 +1,6 @@
 import pygame
 from components.button import Button
+from components.text import Text
 from constants import HEIGHT, WIDTH
 from scenes.scene import Scene
 
@@ -16,9 +17,10 @@ class Menu(Scene):
 
         # maybe make a btn dataclass later
         self.buttons = [
+            Text("BugsLand", WIDTH / 2 - 100, 100, 200, 50, self.screen_surface, 70, pygame.Color(223, 143, 45)),
             Button(
                 WIDTH / 2 - 100,
-                100,
+                200,
                 200,
                 50,
                 "Play",
@@ -27,6 +29,30 @@ class Menu(Scene):
                 pygame.Color(223, 143, 45),
                 # lambda: switch_scene("Loading_screen"),
                 lambda: switch_scene("Gameplay"),
+                self.screen_surface,
+            ),
+            Button(
+                WIDTH / 2 - 100,
+                300,
+                200,
+                50,
+                "About",
+                48,
+                pygame.Color(123, 243, 145),
+                pygame.Color(223, 143, 45),
+                lambda: switch_scene("about"),
+                self.screen_surface,
+            ),
+            Button(
+                WIDTH / 2 - 100,
+                400,
+                200,
+                50,
+                "Credits",
+                48,
+                pygame.Color(123, 243, 145),
+                pygame.Color(223, 143, 45),
+                lambda: switch_scene("credits"),
                 self.screen_surface,
             )
         ]
@@ -39,7 +65,8 @@ class Menu(Scene):
 
     def update(self, events_list):
         for btn in self.buttons:
-            btn.update(events_list)
+            if isinstance(btn, Button):
+                btn.update(events_list)
 
     def exit(self):
         self.scene_ended = True
