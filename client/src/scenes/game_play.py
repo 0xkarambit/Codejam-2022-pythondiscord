@@ -49,8 +49,8 @@ class gamePlay(Scene):
         self.back_btn.update(events_list)
         self.level.update(events_list)
         if self.level.death() == True:
-            # todo reset camera
-            self.level = Level(self.screen)
+            # self.level = Level(self.screen)
+            self.level.reset()
 
     def exit(self):
         self.scene_ended = True

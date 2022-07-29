@@ -13,57 +13,48 @@ class Level:
 
         # PROPS OF LEVEL CLASS
         self.display_surface = surface
+        self.has_loaded = False
+        self.load_map()
         self.setup_level()
-        self.world_shift = 0
-        # Camera
         self.camera = Camera()
+
+    def reset(self):
+        self.setup_level()
+        self.camera = Camera()
+
+    def load_map(self):
+        if os.getcwd().endswith("\\client\\src"):
+            # changing cwd because all asset paths are set relative to ./Levels
+            os.chdir("./Levels")
+
+        self.tmx_data = util_pygame.load_pygame("./1.tmx")
+        self.has_loaded = True
+
+        # os.chdir("./..")  # reseting the cwd
 
     # CLASS METHOD TO IDENTIFY REQ TILES FOR LEVEL
     def setup_level(self):
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
 
-        if os.getcwd().endswith("\\client\\src"):
-            os.chdir("./Levels")  # todo replace with a better solution
+        self.bg_color = self.tmx_data.background_color
 
-        tmx_data = util_pygame.load_pygame("./1.tmx")
-        self.bg_color = tmx_data.background_color
-
-        tiles_layer = tmx_data.get_layer_by_name("Tile Layer 1")
+        tiles_layer = self.tmx_data.get_layer_by_name("Tile Layer 1")
         for x, y, surf in tiles_layer.tiles():
             pos = (x * surf.get_width(), y * surf.get_height())  # 16 by 16 tiles
             tile = Tile(pos, surf, self.tiles)
             self.tiles.add(tile)
 
-        player_layer = tmx_data.get_layer_by_name("Player")
+        player_layer = self.tmx_data.get_layer_by_name("Player")
         for obj in player_layer:
             pos = (obj.x, obj.y)
             if obj.image:
                 p = Player(pos, obj.image)
                 self.player.add(p)
             else:
-                path = obj.properties.get("sprites")
-                print(path)
-                img = pygame.image.load(path)
-                p = Player(pos, img)
+                path = obj.properties.get("spritesheet")
+                p = Player(pos, path)
                 self.player.add(p)
-
-    def scroll_x(self):
-        player = self.player.sprite
-        player_x = player.rect.centerx
-        direction_x = player.direction.x
-
-        if player_x < _screenWidht / 4 and direction_x < 0:
-            self.world_shift = 8
-            player.speed = 0
-
-        elif player_x > _screenWidht * (3 / 4) and direction_x > 0:
-            self.world_shift = -8
-            player.speed = 0
-
-        else:
-            self.world_shift = 0
-            player.speed = 8
 
     # LEVEL CLASS METHOD - HORIZONTAL COLLISIONS
     def horizontal_movement_collision(self):
@@ -101,6 +92,8 @@ class Level:
                     player.rect.bottom = sprite.rect.top
                     player.direction.y = 0
                     player.jump_limit = 0
+                    player.in_air_after_jump = False
+                    player.spritesheet.unlock_animation()
 
                 elif player.direction.y < 0:
                     player.rect.top = sprite.rect.bottom
@@ -132,14 +125,15 @@ class Level:
 
         # drawing player relative to camera
         p = self.player.sprite
+        # converting player coordinates to relative camera coordinates
         p_pos = pygame.Vector2(p.rect.x, p.rect.y)
         p_rel_pos = self.camera.get_relative_coors(p_pos)
         p_rel_rect = p.image.get_rect(topleft=p_rel_pos)
+        # rendering the player img
         p_img = p.image
         self.display_surface.blit(p_img, p_rel_rect)
 
     def update(self, events_list):
-        self.tiles.update(self.world_shift)
         self.player.update()
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
