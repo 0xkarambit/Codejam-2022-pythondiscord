@@ -13,7 +13,7 @@
   <image source="../../assets/Pixel_Adventure_1/Free/Traps/Spikes/Idle.png" width="16" height="16"/>
  </tileset>
  <imagelayer id="5" name="Background" repeatx="1">
-  <image source="../../../../../Downloads/background.png" width="480" height="320"/>
+  <image source="../../assets/platform_metroidvania_asset_pack v1.01/tiles and background_foreground (new)/background.png" width="480" height="320"/>
  </imagelayer>
  <layer id="1" name="Tile Layer 1" width="150" height="23">
   <data encoding="csv">
