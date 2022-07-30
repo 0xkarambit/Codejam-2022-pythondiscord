@@ -1,10 +1,11 @@
 import pygame
+from settings import TILE_W
 
 
 class Background:
     def __init__(self, bg_layers, speed_list):
         self.bgs = []
-        self.offset = 10
+        self.offset = 2 * TILE_W
         self.prev_cam_pos_x = 0
 
         w_w, w_h = pygame.display.get_window_size()
@@ -75,9 +76,3 @@ class Background:
             bg_obj["rect_l"] = img.get_rect(
                 topleft=(-rect.w + self.offset, 0)
             )  # rect left
-
-
-# 10
-# 20
-
-# dx = -10

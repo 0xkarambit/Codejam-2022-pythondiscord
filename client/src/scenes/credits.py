@@ -1,4 +1,5 @@
 import pygame
+import random
 from components.button import Button
 from components.text import Text
 from constants import HEIGHT, WIDTH
@@ -9,10 +10,13 @@ from scenes.scene import Scene
 # kinda bad ? YEAHHH
 pygame.font.init()
 
+developers = ["Nihal_Navath", "Karambit", "DarkDragon", "Ruthless", "TheLegendBeacon"]
+random.shuffle(developers)
+devs_text = "\n".join(list(developers))
+credits_text = f"""Developers: {devs_text}"""
 
-class Menu(Scene):
+class Credits(Scene):
     def __init__(self, switch_scene):
-        print("Menu scene started")
         self.screen_surface = pygame.display.get_surface()
         self.scene_ended = False
         self.buttons = []
@@ -20,9 +24,9 @@ class Menu(Scene):
         # maybe make a btn dataclass later
         self.buttons = [
             Text(
-                "BugsLand",
-                WIDTH / 2 - 100,
-                100,
+                "Developers",
+                WIDTH / 2 - 90,
+                30,
                 200,
                 50,
                 self.screen_surface,
@@ -30,43 +34,29 @@ class Menu(Scene):
                 70,
                 pygame.Color(223, 143, 45),
             ),
-            Button(
-                WIDTH / 2 - 100,
-                200,
+            Text(
+                credits_text,
+                WIDTH / 2 + 350,
+                100,
                 200,
                 50,
-                "Play",
+                self.screen_surface,
+                True,
+                40,
+                pygame.Color(105,255,105),
+            ),
+            Button(
+                WIDTH / 2 - 400,
+                30,
+                200,
+                50,
+                "<---",
                 48,
                 pygame.Color(123, 243, 145),
                 pygame.Color(223, 143, 45),
-                # lambda: switch_scene("Loading_screen"),
-                lambda: switch_scene("Gameplay"),
+                lambda: switch_scene("Menu"),
                 self.screen_surface,
-            ),
-            Button(
-                WIDTH / 2 - 100,
-                300,
-                200,
-                50,
-                "About",
-                48,
-                pygame.Color(123, 243, 145),
-                pygame.Color(223, 143, 45),
-                lambda: switch_scene("About"),
-                self.screen_surface,
-            ),
-            Button(
-                WIDTH / 2 - 100,
-                400,
-                200,
-                50,
-                "Credits",
-                48,
-                pygame.Color(123, 243, 145),
-                pygame.Color(223, 143, 45),
-                lambda: switch_scene("Credits"),
-                self.screen_surface,
-            ),
+            )
         ]
 
     def render(self):
@@ -82,5 +72,4 @@ class Menu(Scene):
 
     def exit(self):
         self.scene_ended = True
-        print("Menu scene Ending")
         return True

@@ -4,6 +4,8 @@ from typing import Dict
 from scenes.circle_scene import Circle_scene
 from scenes.game_play import gamePlay
 from scenes.loading_screen import Loading_screen
+from scenes.about import About
+from scenes.credits import Credits
 from scenes.menu import Menu
 from scenes.scene import Scene
 
@@ -13,7 +15,6 @@ SCENES_MAP: Dict[str, Scene] = {
     "Circle_scene": Circle_scene,
     "Loading_screen": Loading_screen,
     "Gameplay": gamePlay,
-    #uncomment  when the pages are ready
-    # "About": todo,
-    # "Credits": Credits,
+    "About": About,
+    "Credits": Credits,
 }

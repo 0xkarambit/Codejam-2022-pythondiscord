@@ -99,7 +99,7 @@ class Loading_screen(Scene):
                     self.delta_h[i] = -self.delta_h[i]
 
     def exit(self):
-        print("Scene Loading_screen Over !")
+        print("Scene Loading_screen Over!")
         # To disable the timer for an event, set the milliseconds argument to 0.
         # pygame.time.set_timer(self.UPDATE_BARS, 0)
         self.scene_ended = True

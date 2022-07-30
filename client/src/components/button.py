@@ -25,6 +25,7 @@ class Button:
         self.onclick = onclick
         self.rect = pygame.Rect(x, y, w, h)
         self.text_rect = pygame.Rect(x, y, w, h)
+        self.hover = False
 
         # centering the text inside the rect
         font = pygame.font.SysFont(None, font_size)
@@ -40,11 +41,32 @@ class Button:
 
         self.img = font.render(text, True, self.color)  # we dont need to store text btw
 
+    def on_hover(self):
+        if not self.hover:
+            self.hover = True
+            self.old_styling = (self.bgColor, self.color)
+            self.bgColor = pygame.Color(0, 0, 0)
+            self.color = pygame.Color(255, 255, 255)
+
+    def on_hover_out(self):
+        self.hover = False
+        self.bgColor, self.color = self.old_styling
+
     def update(self, events_list):
         for event in events_list:
+            #getting mouse cords
+            x, y = pygame.mouse.get_pos()
+            if self.rect.x < x and x < self.rect.x + self.rect.width:
+                if self.rect.y < y and y < self.rect.y + self.rect.height:
+                    self.on_hover()
+                elif self.hover:
+                    # if we are not hovering anymore, remove the hover styling
+                    self.on_hover_out()
+            elif self.hover:
+                # if we are not hovering anymore on the width side, remove the hover styling
+                self.on_hover_out()
             if event.type == pygame.MOUSEBUTTONUP:
                 # checking if click is inside the rect
-                x, y = pygame.mouse.get_pos()
                 if self.rect.x < x and x < self.rect.x + self.rect.width:
                     if self.rect.y < y and y < self.rect.y + self.rect.height:
                         self.onclick()
