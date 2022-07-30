@@ -30,7 +30,7 @@ class About(Scene):
                 pygame.Color(223, 143, 45),
             ),
             Text(
-                "errr about the game I guess lol",
+                "Game made for python discord game jam",
                 WIDTH / 2 - 100,
                 100,
                 200,

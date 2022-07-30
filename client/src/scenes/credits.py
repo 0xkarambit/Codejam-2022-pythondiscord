@@ -10,10 +10,10 @@ from scenes.scene import Scene
 # kinda bad ? YEAHHH
 pygame.font.init()
 
-developers = ["Nihal_Navath", "Karambit", "DarkDragon", "Ruthless", "TheLegendBeacon"]
+developers = ["Nihal Navath", "Karambit", "DarkDragon", "Ruthless", "TheLegendBeacon"]
 random.shuffle(developers)
 devs_text = "\n".join(list(developers))
-credits_text = f"""Developers: {devs_text}"""
+credits_text = devs_text
 
 class Credits(Scene):
     def __init__(self, switch_scene):
@@ -42,7 +42,7 @@ class Credits(Scene):
                 50,
                 self.screen_surface,
                 True,
-                40,
+                50,
                 pygame.Color(105,255,105),
             ),
             Button(

@@ -33,9 +33,9 @@ class Text():
         self.text_rect = pygame.Rect(x + self.padding_x, y + self.padding_y, w, h)
 
 
-    def render(self):
+    def render(self, delimiter: str = "\n") -> None:
         if self.multiline:
-            text = self.text.split()
+            text = self.text.split(delimiter)
             for i, line in enumerate(text):
                 d = i * 50
                 rend = self.font.render(line, True, self.color)
