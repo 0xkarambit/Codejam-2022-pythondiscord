@@ -1,12 +1,45 @@
+import asyncio
 import os
+import threading
 
 import pygame
-from background import Background
+import websockets
 from camera import Camera
+from connection import update_data
+from other_player import OtherPlayer
 from player import Player
 from pytmx import util_pygame
 from settings import TILE_W, _screenHeight, _screenWidth
 from tiles import Tile
+from utils.background import Background
+
+other_player = {}
+
+
+def update_other_player_data(data):
+    global other_player
+    print("\x1b[94m")
+    print("data", data)
+    if data == []:
+        return
+    x, y, is_dead, anim = data[0]
+    print([x, y, is_dead, anim])
+    print("\x1b[0m")
+
+    other_player.rect.x = x
+    other_player.rect.y = y
+    other_player.is_dead = is_dead
+    other_player.spritesheet.selected_animation = anim
+
+
+async def tick(player):
+    async with websockets.connect("ws://localhost:8765") as ws:
+        anim = player.spritesheet.selected_animation
+        await update_data(
+            ws,
+            [player.rect.x, player.rect.y, player.is_dead, anim],
+            update_other_player_data,
+        )
 
 
 class Level:
@@ -41,6 +74,7 @@ class Level:
 
     # CLASS METHOD TO IDENTIFY REQ TILES FOR LEVEL
     def setup_level(self):
+        global other_player
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
 
@@ -62,6 +96,8 @@ class Level:
                 path = obj.properties.get("spritesheet")
                 p = Player(pos, path)
                 self.player.add(p)
+                # OtherPlayer
+                other_player = OtherPlayer((0, 0), path)
 
     # LEVEL CLASS METHOD - HORIZONTAL COLLISIONS
     def horizontal_movement_collision(self):
@@ -112,6 +148,7 @@ class Level:
         # print("y = " + str(player.rect.y) + "  x = " + str(player.rect.x))
         # print(str(_screenHeight))
 
+        # TODO NOTIFY OTHER PLAYER OF DEATH
         # CONDITIONAL STATEMENT TO CHECK IF PLAYER IS OUT-OF-BOUNDS IN Y-AXIS
         if player.rect.y > _screenHeight:
             return True
@@ -133,14 +170,12 @@ class Level:
                 self.display_surface.blit(tile.image, rel_rect)
 
         # drawing player relative to camera
-        p = self.player.sprite
-        # converting player coordinates to relative camera coordinates
-        p_pos = pygame.Vector2(p.rect.x, p.rect.y)
-        p_rel_pos = self.camera.get_relative_coors(p_pos)
-        p_rel_rect = p.image.get_rect(topleft=p_rel_pos)
-        # rendering the player img
-        p_img = p.image
-        self.display_surface.blit(p_img, p_rel_rect)
+        player = self.player.sprite
+        player.render(self.display_surface, self.camera)
+
+        # rendering the other_player
+        global other_player
+        other_player.render(self.display_surface, self.camera)
 
     def update(self, events_list):
         self.player.update()
@@ -149,3 +184,11 @@ class Level:
         self.camera.follow_player(self.player.sprite)
         # print(self.camera.pos)
         self.background.update(self.camera.pos.x)
+
+        # sending and receiving player positions
+        self.thread = threading.Thread(
+            target=asyncio.get_event_loop().run_until_complete,
+            args=[tick(self.player.sprite)],
+        )
+        self.thread.daemon = True
+        self.thread.start()

@@ -7,7 +7,6 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
 
         self.spritesheet = Spritesheet(spritesheet_path)
-        self.effects_spritesheet = Spritesheet(spritesheet_path)
         self.spritesheet.select_animation("idle_anim")
         self.image = self.spritesheet.get_sprite()
         self.rect = self.image.get_rect(topleft=pos)
@@ -23,10 +22,19 @@ class Player(pygame.sprite.Sprite):
         self.in_air_after_jump = False
         self.last_direction = 1
         self.state = "idle"
+        self.state_locked = False
+        # possible states -> jump, run, idle, sprint ?
+        # pos, dir, self.spritesheet.selected_animation
+        self.is_dead = False
 
         # frame counting
         self.fc = 0
         self.frames_interval = 10
+
+    def set_state(self, state, *, force=False, lock=False):
+        if not self.state_locked or force == True:
+            self.state = state
+        self.state_locked = lock
 
     def reset_speed(self):
         self.speed = self.default_speed
@@ -43,17 +51,20 @@ class Player(pygame.sprite.Sprite):
             self.direction.x = 1
             self.last_direction = 1
             self.spritesheet.select_animation("run_anim")
+            self.set_state("run")  # todo rm me
 
         elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.direction.x = -1
             self.last_direction = -1
             self.spritesheet.select_animation("run_anim", True)
+            self.set_state("run")  # todo rm me
 
         else:
             self.direction.x = 0
             if not self.in_air_after_jump:
                 inverted = self.last_direction == -1
                 self.spritesheet.select_animation("idle_anim", inverted)
+                self.set_state("idle")  # todo rm me
 
         if keys[pygame.K_UP] or keys[pygame.K_SPACE] or keys[pygame.K_w]:
             if self.jump_limit < 12:
@@ -120,3 +131,12 @@ class Player(pygame.sprite.Sprite):
             self.fc = 0
             if self.state == "sprinting":
                 self.reset_speed()
+
+    def render(self, surface, camera):
+        # converting player coordinates to relative camera coordinates
+        coor = pygame.Vector2(self.rect.x, self.rect.y)
+        rel_coor = camera.get_relative_coors(coor)
+        # p_rel_pos = self.camera.get_relative_coors(p_pos)
+        rel_rect = self.image.get_rect(topleft=rel_coor)
+        # rendering the player img
+        surface.blit(self.image, rel_rect)

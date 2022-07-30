@@ -12,7 +12,7 @@ from settings import _screenHeight, _screenWidth
 async def load():
     async with websockets.connect("ws://localhost:8765") as ws:
         await authenticate(ws)
-        await searching(ws, lambda m: print(f"joining room {m}"))
+        await searching(ws, lambda m: print(f"\x1b[91m joining room {m} \x1b[0m"))
 
 
 pygame.font.init()
@@ -84,7 +84,7 @@ class Loading_screen(Scene):
 
         if not self.thread.is_alive():
             print("CLOSED THE THREAD")
-            self.switch_scene("Circle_scene")
+            self.switch_scene("Gameplay")
 
         self.frame_counter += 1
         if self.frame_counter > self.frame_interval:

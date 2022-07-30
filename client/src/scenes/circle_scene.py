@@ -7,7 +7,7 @@ import websockets
 from components.button import Button
 from components.other_player import Other_Player
 from components.player import Player
-from connection import update_position
+from connection import update_data
 from constants import HEIGHT, WIDTH
 from scenes.scene import Scene
 
@@ -23,7 +23,7 @@ def update_pos(positions):
 
 async def tick(player):
     async with websockets.connect("ws://localhost:8765") as ws:
-        await update_position(ws, [player.rect.x, player.rect.y], update_pos)
+        await update_data(ws, [player.rect.x, player.rect.y], update_pos)
         # dont use this code v.high cpu usage
         # t = time.time()
         # while True:
