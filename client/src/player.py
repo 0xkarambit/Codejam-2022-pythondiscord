@@ -41,7 +41,7 @@ class Player(pygame.sprite.Sprite):
                 self.spritesheet.select_animation("idle_anim", inverted)
 
         if keys[pygame.K_UP] or keys[pygame.K_SPACE] or keys[pygame.K_w]:
-            if self.jump_limit < 15:
+            if self.jump_limit < 12:
                 need_inverted = self.last_direction == -1
 
                 # show double jump animation if already in air
@@ -56,6 +56,8 @@ class Player(pygame.sprite.Sprite):
                     )
                     self.spritesheet.queue_animation("jump_up_anim", need_inverted)
                 self.spritesheet.lock_animation()
+        if keys[pygame.K_UP]:
+            if self.jump_limit < 15:
                 self.jump()
 
         if self.in_air_after_jump:

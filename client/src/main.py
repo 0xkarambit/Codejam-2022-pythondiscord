@@ -6,10 +6,19 @@ from scenes.game_play import gamePlay
 from scenes.menu import Menu
 from scenes.scene import Scene
 from scenes.scenes_manager import SCENES_MAP
+from pathlib import Path
 
 # Setting up the window
-pygame.init()
+pygame.font.init()
+pygame.mixer.init()
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+music = pygame.mixer.music.load(
+    Path(__file__).resolve().parent.parent
+    / "assets"
+    / "Sounds"
+    / "04-Meydan-Surreal-Forest.mp3"
+)
+pygame.mixer.music.play(-1)
 pygame.display.set_caption("BugsLand")
 
 
