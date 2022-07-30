@@ -118,10 +118,14 @@ class Spritesheet:
             )
 
     def get_sprite(self) -> pygame.surface:
-        # pprint(self.animations[self.selected_animation])
-        return self.animations[self.selected_animation].get("sprites")[
-            self.animation_index
-        ]
+        try:
+            return self.animations[self.selected_animation].get("sprites")[
+                self.animation_index
+            ]
+        except IndexError:
+            print("\x1b[91m")
+            print("IndexError : ", self.selected_animation, " in ", self.animations)
+            print("\x1b[0m")
 
     def lock_animation(self):
         self.locked = True

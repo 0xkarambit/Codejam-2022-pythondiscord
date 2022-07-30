@@ -18,18 +18,24 @@ other_player = {}
 
 def update_other_player_data(data):
     global other_player
-    print("\x1b[94m")
-    print("data", data)
+    # print("\x1b[94m")
+    # print("data", data)
     if data == []:
+        print("No Data Received")
         return
     x, y, is_dead, anim = data[0]
-    print([x, y, is_dead, anim])
-    print("\x1b[0m")
+    # print([x, y, is_dead, anim])
+    # print("\x1b[0m")
 
     other_player.rect.x = x
     other_player.rect.y = y
     other_player.is_dead = is_dead
-    other_player.spritesheet.selected_animation = anim
+    if anim == other_player.prev_animation:
+        return
+    else:
+        # the `anim` name already contains the "_inverted" string if it is required
+        other_player.spritesheet.select_animation(anim, noreset=True)
+        # if we simply reassign the name the current_animantion_len is not reassigned
 
 
 async def tick(player):
@@ -179,6 +185,7 @@ class Level:
 
     def update(self, events_list):
         self.player.update()
+        other_player.update()
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
         self.camera.follow_player(self.player.sprite)
