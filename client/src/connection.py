@@ -3,7 +3,7 @@
 import json
 import uuid
 from os.path import exists
-from typing import Callable, Tuple
+from typing import Callable, List, Union
 
 uid = None
 
@@ -34,38 +34,14 @@ async def searching(websocket, call_when_done: Callable):
         call_when_done(match)
 
 
-async def update_position(
-    websocket, data: Tuple[int, int, int], call_when_done: Callable
-):  # data is in the form (position x, position y, lives)
-    await websocket.send(json.dumps({"id": uid, "position": data}))
+async def update_data(
+    websocket, data: List[Union[int, int, bool, str]], call_when_done: Callable
+):  # data is in the form (position x, position y, is_dead, animation_state)
+    await websocket.send(json.dumps({"id": uid, "data": data}))
     response = await websocket.recv()
-    positions = json.loads(response).get("positions")
+    positions = json.loads(response).get("data")
     if isinstance(positions, list):
         call_when_done(positions)
-
-
-async def dead(websocket, call_when_done: Callable):
-    await websocket.send(json.dumps({"id": uid, "dead": True}))
-    response = await websocket.recv()
-    lives = json.loads(response).get("lives")
-    if isinstance(lives, int):
-        call_when_done(lives)
-
-
-async def completed(websocket, call_when_done: Callable):
-    await websocket.send(json.dumps({"id": uid, "completed": True}))
-    response = await websocket.recv()
-    rank = json.loads(response).get("rank")
-    if isinstance(rank, int):
-        call_when_done(rank)
-
-
-async def lost(websocket, call_when_done: Callable):
-    await websocket.send(json.dumps({"id": uid, "lost": True}))
-    response = await websocket.recv()
-    rank = json.loads(response).get("rank")
-    if isinstance(rank, int):
-        call_when_done(rank)
 
 
 async def leave(websocket, call_when_done: Callable):
