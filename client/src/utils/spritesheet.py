@@ -73,9 +73,25 @@ class Spritesheet:
         return (False, False)
 
     def queue_animation(self, animation: str, inverted: bool = False):
+        # if self.next_animation == "":
+        #     # to be used when the current animation is to be stopped automatically after completing
+        #     self.next_animation = animation
+        #     return
         animation = animation + "_inverted" if inverted else animation
         if animation in self.animation_names:
             self.next_animation = animation
+
+    def invert_animation(self, inverted):
+        animation = self.selected_animation
+        already_inverted = animation.endswith("_inverted")
+        if inverted and not already_inverted:
+            self.selected_animation += "_inverted"
+        if not inverted and already_inverted:
+            self.selected_animation = animation.replace("_inverted", "")
+
+        # animation = animation + "_inverted" if inverted else animation
+        # if animation in self.animation_names:
+        #     self.selected_animation = animation
 
     def select_animation(
         self, animation: str, inverted=False, *, forced=False, noreset=False
