@@ -79,7 +79,8 @@ class Level:
         self.camera = Camera()
 
     def load_map(self):
-        if os.getcwd().endswith("\\client\\src"):
+        print(os.getcwd())
+        if os.getcwd().endswith("\\client\\client") or os.getcwd().endswith("/client/client"):
             # changing cwd because all asset paths are set relative to ./Levels
             os.chdir("./Levels")
 
