@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 
 import pygame
@@ -10,6 +11,11 @@ from scenes.scenes_manager import SCENES_MAP
 # Setting up the window
 pygame.font.init()
 pygame.mixer.init()
+
+# CODE RESPONSIBLE TO DISABLE STDERR - UNCOMMENT TO DISABLE
+# f = open(os.devnull, 'w')
+# sys.stderr = f
+# END OF CODE
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
 

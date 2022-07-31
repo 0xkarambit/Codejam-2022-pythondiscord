@@ -1,7 +1,7 @@
 import asyncio
 import os
 import threading
-
+from pathlib import Path
 import pygame
 import websockets
 from camera import Camera
@@ -61,6 +61,11 @@ class Level:
         self.init_all_entites()
         self.camera = Camera()
 
+        self.player_contact = True
+
+        # Player VERTICAL TOUCH SFX
+        self.landSFX = pygame.mixer.Sound(Path(__file__).resolve().parent.parent / "assets" / "Sounds" / "land.wav") # SFX when jump
+        
         # initialised using the map | ? if i declare them here they arnt global ? wtf
         # self.tiles = pygame.sprite.Group()
         # self.player = pygame.sprite.GroupSingle()
@@ -171,10 +176,24 @@ class Level:
                     player.jump_limit = 0
                     player.in_air_after_jump = False
                     player.spritesheet.unlock_animation()
+                    
+                    # PLAY SFX
+                    if self.player_contact == True:
+                        self.landSFX.play()
+                        self.player_contact = False
 
                 elif player.direction.y < 0:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
+                    
+                    # PLAY SFX
+                    if self.player_contact == True:
+                        self.landSFX.play()
+                        self.player_contact = False
+
+            elif abs(player.direction.y) > 2:
+                self.player_contact = True
+
 
     # CLASS METHOD FOR DEATH AND RESPAWN
     def death(self):
