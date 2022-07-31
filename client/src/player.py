@@ -5,10 +5,11 @@ from utils.spritesheet import Spritesheet
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, spritesheet_path):
         super().__init__()
-
+        self.default_pos = pos
         self.spritesheet = Spritesheet(spritesheet_path)
         self.spritesheet.select_animation("idle_anim")
         self.image = self.spritesheet.get_sprite()
+        self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect(topleft=pos)
         # todo rm |  for development
         # self.rect.w = 64
@@ -28,10 +29,33 @@ class Player(pygame.sprite.Sprite):
         # possible states -> jump, run, idle, sprint ?
         # pos, dir, self.spritesheet.selected_animation
         self.is_dead = False
+        # self.respawn_time = 30 # no of intervals so 30 * 10 = 300 frames game @ 60 fps so 5 Seconds roughly
+        self.respawn_time = 5  # in seconds
 
         # frame counting
         self.fc = 0
         self.frames_interval = 10
+        self.REVIVE_SIGNAL = pygame.USEREVENT + 1
+
+    def death(self):
+        if not self.is_dead:
+            self.is_dead = True
+            self.dir = 0
+            self.in_air_after_jump = False
+            self.last_direction = 1
+            pygame.time.set_timer(self.REVIVE_SIGNAL, 1000 * self.respawn_time)
+
+    def respawn(self):
+        self.is_dead = False
+        # to unset the timer !
+        pygame.time.set_timer(self.REVIVE_SIGNAL, 0)
+
+        self.rect.x = self.default_pos[0]
+        self.rect.y = self.default_pos[1]
+        print()
+        print("THE PLAYER HAS RESPAWNED !")
+        # self.rect.x = last_check_point_x
+        # self.rect.y = last_check_point_y
 
     def reset_speed(self):
         self.speed = self.default_speed
@@ -109,6 +133,8 @@ class Player(pygame.sprite.Sprite):
             self.spritesheet.lock_animation()
 
     def apply_gravity(self):
+        if self.is_dead:
+            return
         self.direction.y += self.gravity
         self.rect.y += self.direction.y
 
@@ -117,8 +143,20 @@ class Player(pygame.sprite.Sprite):
         self.in_air_after_jump = True
         self.jump_limit += 1
 
-    def update(self):
+    def update(self, events):
+        if self.is_dead:
+            return
         self.get_input()
+        # self.rect.x += self.direction.x * self.speed
+        # self.apply_gravity()
+
+        # respawn counter
+        for e in events:
+            print()
+            print(e.type)
+            if e.type == self.REVIVE_SIGNAL:
+                self.respawn()
+
         (frame_changed, animation_finished) = self.spritesheet.update()
         if frame_changed:
             self.image = self.spritesheet.get_sprite()
@@ -133,6 +171,8 @@ class Player(pygame.sprite.Sprite):
                 self.reset_speed()
 
     def render(self, surface, camera):
+        if self.is_dead:
+            return
         # converting player coordinates to relative camera coordinates
         coor = pygame.Vector2(self.rect.x, self.rect.y)
         rel_coor = camera.get_relative_coors(coor)

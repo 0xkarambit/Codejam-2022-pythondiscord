@@ -5,6 +5,8 @@ import threading
 import pygame
 import websockets
 from camera import Camera
+from components.breakable_tile import Breakable_tile
+from components.spikes import Spike
 from connection import update_data
 from constants import TILE_H, TILE_W
 from other_player import OtherPlayer
@@ -56,7 +58,15 @@ class Level:
         self.has_loaded = False
         self.load_map()
         self.setup_level()
+        self.init_all_entites()
         self.camera = Camera()
+
+        # initialised using the map | ? if i declare them here they arnt global ? wtf
+        # self.tiles = pygame.sprite.Group()
+        # self.player = pygame.sprite.GroupSingle()
+        # self.spikes = pygame.sprite.Group()
+        # self.breakable_tiles = pygame.sprite.Group()
+        # self.entities = [self.tiles, self.breakable_tiles]
 
     def reset(self):
         self.setup_level()
@@ -76,17 +86,16 @@ class Level:
         bg_layers = [self.tmx_data.get_layer_by_name(i) for i in bg_layer_names]
         bg_layers_speeds = [layer.properties.get("speed") for layer in bg_layers]
         self.background = Background(bg_layers, bg_layers_speeds)
-
         # os.chdir("./..")  # reseting the cwd
 
     # CLASS METHOD TO IDENTIFY REQ TILES FOR LEVEL
     def setup_level(self):
         global other_player
+
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
 
-        self.bg_color = self.tmx_data.background_color
-
+        # Tile Layer 1
         tiles_layer = self.tmx_data.get_layer_by_name("Tile Layer 1")
         for x, y, surf in tiles_layer.tiles():
             # pos = (x * surf.get_width(), y * surf.get_height())  # 16 by 16 tiles
@@ -97,15 +106,32 @@ class Level:
         player_layer = self.tmx_data.get_layer_by_name("Player")
         for obj in player_layer:
             pos = (obj.x, obj.y)
-            if obj.image:
-                p = Player(pos, obj.image)
-                self.player.add(p)
-            else:
-                path = obj.properties.get("spritesheet")
-                p = Player(pos, path)
-                self.player.add(p)
-                # OtherPlayer
-                other_player = OtherPlayer((0, 0), path)
+            path = obj.properties.get("spritesheet")
+            p = Player(pos, path)
+            self.player.add(p)
+            # OtherPlayer
+            other_player = OtherPlayer((0, 0), path)
+
+        self.init_all_entites()
+        self.entities = [self.spikes, self.breakable_tiles]
+
+    def init_all_entites(self):
+        self.init_spikes()
+        self.init_breakable_tiles()
+
+    def init_spikes(self):
+        self.spikes = pygame.sprite.Group()
+        spike_layer = self.tmx_data.get_layer_by_name("Spikes")
+        for x, y, surf in spike_layer.tiles():
+            pos = (x * TILE_W, y * TILE_H)
+            Spike(pos, surf, self.spikes)
+
+    def init_breakable_tiles(self):
+        self.breakable_tiles = pygame.sprite.Group()
+        breakable_tiles_layer = self.tmx_data.get_layer_by_name("Breakable Tiles")
+        for x, y, surf in breakable_tiles_layer.tiles():
+            pos = (x * TILE_W, y * TILE_H)
+            Breakable_tile(pos, surf, self.breakable_tiles)
 
     # LEVEL CLASS METHOD - HORIZONTAL COLLISIONS
     def horizontal_movement_collision(self):
@@ -153,8 +179,6 @@ class Level:
     # CLASS METHOD FOR DEATH AND RESPAWN
     def death(self):
         player = self.player.sprite
-        # print("y = " + str(player.rect.y) + "  x = " + str(player.rect.x))
-        # print(str(_screenHeight))
 
         # TODO NOTIFY OTHER PLAYER OF DEATH
         # CONDITIONAL STATEMENT TO CHECK IF PLAYER IS OUT-OF-BOUNDS IN Y-AXIS
@@ -164,8 +188,8 @@ class Level:
     def render(self):
         # background
         self.background.render(self.display_surface)
-        # drawing tiles relative to camera
 
+        # drawing tiles relative to camera
         for tile in self.tiles.sprites():
             # tiles are looped rowwise
             if (
@@ -185,14 +209,28 @@ class Level:
         global other_player
         other_player.render(self.display_surface, self.camera)
 
+        # Entities
+        for grp in self.entities:
+            for item in grp:
+                item.render(self.display_surface, self.camera, self.player.sprite)
+
     def update(self, events_list):
-        self.player.update()
+
+        # Background
+        self.background.update(self.camera.pos.x)
+
+        # Players
         other_player.update()
+        self.player.update(events_list)
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
         self.camera.follow_player(self.player.sprite)
-        # print(self.camera.pos)
-        self.background.update(self.camera.pos.x)
+
+        # Entities
+        for grp in self.entities:
+            for item in grp:
+                # if item.type == "spike"
+                item.update(events_list, self.player.sprite)
 
         # sending and receiving player positions
         self.thread = threading.Thread(
