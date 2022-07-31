@@ -1,6 +1,6 @@
 import pygame
 from utils.spritesheet import Spritesheet
-
+from pathlib import Path
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, spritesheet_path):
@@ -36,6 +36,11 @@ class Player(pygame.sprite.Sprite):
         self.fc = 0
         self.frames_interval = 10
         self.REVIVE_SIGNAL = pygame.USEREVENT + 1
+
+
+        # Player SFX
+        self.jumpSFX = pygame.mixer.Sound(Path(__file__).resolve().parent.parent / "assets" / "Sounds" / "jump.wav") # SFX when jump
+        self.jumpSFX.set_volume(0.3)
 
     def death(self):
         if not self.is_dead:
@@ -88,8 +93,13 @@ class Player(pygame.sprite.Sprite):
                 self.spritesheet.select_animation("idle_anim", inverted)
                 # self.set_state("idle")  # todo rm me
 
+        # Jump Case
         if keys[pygame.K_UP] or keys[pygame.K_SPACE] or keys[pygame.K_w]:
             if self.jump_limit < 12:
+
+                # Play Jump SFX
+                self.jumpSFX.play()
+
                 need_inverted = self.last_direction == -1
 
                 # show double jump animation if *already in air*
