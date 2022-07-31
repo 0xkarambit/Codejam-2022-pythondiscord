@@ -40,7 +40,7 @@ class Player(pygame.sprite.Sprite):
 
         # Player SFX
         self.jumpSFX = pygame.mixer.Sound(Path(__file__).resolve().parent.parent / "assets" / "Sounds" / "jump.wav") # SFX when jump
-        self.jumpSFX.set_volume(0.3)
+        self.jumpSFX.set_volume(0.1)
 
     def death(self):
         if not self.is_dead:
