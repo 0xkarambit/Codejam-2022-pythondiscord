@@ -5,15 +5,7 @@ import uuid
 from os.path import exists
 from typing import Callable, List, Union
 
-uid = None
-
-if exists("uid_details.txt"):
-    with open("uid_details.txt", "r") as file:
-        uid = int(file.read().strip())
-else:
-    uid = uuid.uuid1().int >> 64
-    with open("uid_details.txt", "w") as file:
-        file.write(str(uid))
+uid = uuid.uuid1().int >> 64
 
 
 async def authenticate(websocket):

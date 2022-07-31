@@ -11,13 +11,7 @@ from scenes.scenes_manager import SCENES_MAP
 pygame.font.init()
 pygame.mixer.init()
 
-WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.SCALED)
-w, h = pygame.display.get_window_size()
-WIN = pygame.display.set_mode((w, h), pygame.FULLSCREEN)
-
-print("\x1b[91m")
-print(f"{w},{h}")
-print("\x1b[0m")
+WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
 
 
 # setting currect directory manually to be able to run the project from anywhere

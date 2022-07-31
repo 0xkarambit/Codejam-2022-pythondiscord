@@ -30,4 +30,4 @@ build/
 # MacOS
 .DS_Store
 
-uid_details.txt
+**/uid_details.txt

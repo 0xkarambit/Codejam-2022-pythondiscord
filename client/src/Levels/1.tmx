@@ -18,7 +18,7 @@
    <property name="speed" type="float" value="1.2"/>
   </properties>
  </imagelayer>
- <imagelayer id="6" name="bg_1">
+ <imagelayer id="6" name="bg_1" repeatx="1">
   <image source="../../assets/platform_metroidvania_asset_pack v1.01/tiles and background_foreground (new)/bg_1.png" width="240" height="160"/>
   <properties>
    <property name="speed" type="float" value="1.5"/>
@@ -27,7 +27,7 @@
  <imagelayer id="7" name="bg_2" repeatx="1">
   <image source="../../assets/platform_metroidvania_asset_pack v1.01/tiles and background_foreground (new)/bg_2.png" width="240" height="160"/>
   <properties>
-   <property name="speed" type="float" value="1.1"/>
+   <property name="speed" type="float" value="1.7"/>
   </properties>
  </imagelayer>
  <layer id="1" name="Tile Layer 1" width="150" height="23">
