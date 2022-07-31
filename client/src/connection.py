@@ -2,7 +2,6 @@
 
 import json
 import uuid
-from os.path import exists
 from typing import Callable, List, Union
 
 uid = uuid.uuid1().int >> 64
@@ -27,12 +26,18 @@ async def searching(websocket, call_when_done: Callable):
 
 
 async def update_data(
-    websocket, data: List[Union[int, int, bool, str]], call_when_done: Callable
-):  # data is in the form (position x, position y, is_dead, animation_state)
+    websocket,
+    data: List[Union[int, int, bool, str, bool]],
+    call_when_done: Callable,
+    call_when_game_over: Callable = lambda: 0,
+):  # data is in the form (position x, position y, is_dead, animation_state, is_done)
     await websocket.send(json.dumps({"id": uid, "data": data}))
     response = await websocket.recv()
     positions = json.loads(response).get("data")
     if isinstance(positions, list):
+        *positions, is_done = positions
+        if is_done:
+            call_when_game_over()
         call_when_done(positions)
 
 

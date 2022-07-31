@@ -31,6 +31,7 @@ class EventHandler:
                     "position y": 0,
                     "is_dead": False,
                     "animation_state": "idle",
+                    "is_done": False
                 }
                 for i in self.current_room
             }
@@ -59,9 +60,10 @@ class EventHandler:
 
     async def leave_room(self, uid, socket):
         room = self.active_players[uid]
-        for i in self.active_rooms[room]:
-            self.active_players[i] = 0  # free to join some other room
-        del self.active_rooms[room]
+        self.active_rooms[room][uid]["is_done"] = True
+        self.active_players[uid] = 0
+        if all(self.active_players[i] == 0 for i in self.active_rooms[room]):
+            del self.active_rooms[room]
         await socket.send(json.dumps({"left": True}))
 
 
