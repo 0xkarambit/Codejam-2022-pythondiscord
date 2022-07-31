@@ -17,7 +17,7 @@ developers = {
     "Ruthless": "https://github.com/nsk126",
     "TheLegendBeacon": "https://github.com/TheLegendBeacon",
 }
-keys = developers.keys()
+keys = list(developers.keys())
 
 
 class Credits(Scene):
