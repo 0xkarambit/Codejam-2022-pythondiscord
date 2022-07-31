@@ -3,8 +3,6 @@ from pathlib import Path
 
 import pygame
 from constants import FPS, HEIGHT, WIDTH
-
-# from settings import FPS, _screenHeight, _screenWidth
 from scenes.game_play import gamePlay
 from scenes.menu import Menu
 from scenes.scene import Scene
@@ -13,7 +11,15 @@ from scenes.scenes_manager import SCENES_MAP
 # Setting up the window
 pygame.font.init()
 pygame.mixer.init()
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+
+WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.SCALED)
+w, h = pygame.display.get_window_size()
+WIN = pygame.display.set_mode((w, h), pygame.FULLSCREEN)
+
+print("\x1b[91m")
+print(f"{w},{h}")
+print("\x1b[0m")
+
 
 # setting currect directory manually to be able to run the project from anywhere
 os.chdir(Path(__file__).resolve().parent)

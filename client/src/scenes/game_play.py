@@ -2,7 +2,6 @@ import pygame
 from components.button import Button
 from level import Level
 from scenes.scene import Scene
-from settings import _screenHeight, _screenWidth
 
 
 class gamePlay(Scene):
@@ -10,14 +9,13 @@ class gamePlay(Scene):
         # debug
         print("Init Gameplay Screen")
 
-        _screenReso = (_screenWidth, _screenHeight)
-
         # create screen and init clock
         # self.screen = pygame.display.set_mode(_screenReso, pygame.RESIZABLE)
-        self.screen = pygame.display.set_mode(_screenReso, pygame.SCALED)
+        # self.screen = pygame.display.set_mode(_screenReso, pygame.SCALED)
+        # adding pygame.FULLSCREEN didnt work
         # self.screen = pygame.display.set_mode(_screenReso)
 
-        # self.screen = pygame.display.get_surface()
+        self.screen = pygame.display.get_surface()
         self.scene_ended = False
 
         self.level = Level(self.screen)
@@ -26,6 +24,17 @@ class gamePlay(Scene):
         self.level.render()
 
     def update(self, events_list):
+        # todo remove me i am for development
+        for i in events_list:
+            if i.type == pygame.KEYDOWN:
+                if i.unicode == "c":
+                    self.level.camera.draw_distance.x += 1 * 32
+        # todo remove me i am for development
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_ESCAPE]:
+            pygame.exit()
+            quit()
+
         self.level.update(events_list)
         if self.level.death() == True:
             # self.level = Level(self.screen)

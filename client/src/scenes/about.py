@@ -2,8 +2,6 @@ import pygame
 from components.button import Button
 from components.text import Text
 from constants import HEIGHT, WIDTH
-
-# from settings import _screenHeight, _screenWidth
 from scenes.scene import Scene
 
 # kinda bad ? YEAHHH
@@ -51,7 +49,7 @@ class About(Scene):
                 pygame.Color(223, 143, 45),
                 lambda: switch_scene("Menu"),
                 self.screen_surface,
-            )
+            ),
         ]
 
     def render(self):

@@ -39,8 +39,9 @@ class Loading_screen(Scene):
         x_padding = 80
         y_padding = 65
 
-        x = _screenWidth - t_w - x_padding
-        y = _screenHeight - t_h - y_padding
+        w, h = pygame.display.get_window_size()
+        x = w - t_w - x_padding
+        y = h - t_h - y_padding
 
         self.text_rect = pygame.Rect(x, y, 10, 10)
 

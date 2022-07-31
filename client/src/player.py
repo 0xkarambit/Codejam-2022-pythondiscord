@@ -10,6 +10,9 @@ class Player(pygame.sprite.Sprite):
         self.spritesheet.select_animation("idle_anim")
         self.image = self.spritesheet.get_sprite()
         self.rect = self.image.get_rect(topleft=pos)
+        # todo rm |  for development
+        # self.rect.w = 64
+        # self.rect.h = 64
 
         # PLAYER MOVEMENT
         self.default_speed = 5
@@ -124,6 +127,8 @@ class Player(pygame.sprite.Sprite):
         (frame_changed, animation_finished) = self.spritesheet.update()
         if frame_changed:
             self.image = self.spritesheet.get_sprite()
+            # todo rm | for development
+            # self.image = pygame.transform.scale(self.image, (self.rect.w, self.rect.h))
 
         self.fc += 1
         # reseting speed to normal after sprinting

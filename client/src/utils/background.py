@@ -1,9 +1,10 @@
 import pygame
-from settings import TILE_W
+from constants import TILE_W
 
 
 class Background:
     def __init__(self, bg_layers, speed_list):
+        # todo try passing in multiple y coor list
         self.bgs = []
         self.offset = 2 * TILE_W
         self.prev_cam_pos_x = 0
@@ -17,21 +18,14 @@ class Background:
             rect_r = img.get_rect(topleft=(rect.w, 0))  # rect right
             rect_l = img.get_rect(topleft=(-rect.w, 0))  # rect left
 
-            bg_obj = {
-                "img": img,
-                "speed": speed,
-                "rect": rect,
-                "rect_r": rect_r,
-                "rect_l": rect_l,
-            }
+            bg_obj = {"img": img, "speed": speed, "rects": [rect_l, rect, rect_r]}
+
             self.bgs.append(bg_obj)
 
     def render(self, surface):
         for bg_obj in self.bgs:
             img = bg_obj["img"]
-            rect = bg_obj["rect"]
-            rect_r = bg_obj["rect_r"]
-            rect_l = bg_obj["rect_l"]
+            rect_r, rect, rect_l = bg_obj["rects"]
 
             surface.blit(img, rect)
             surface.blit(img, rect_r)
@@ -42,24 +36,22 @@ class Background:
 
         for bg_obj in self.bgs:
             # shifting image backwards according to the bg_speed
-            rect = bg_obj.get("rect")
-            rect_r = bg_obj.get("rect_r")
-            rect_l = bg_obj.get("rect_l")
+            rect_l, rect, rect_r = bg_obj["rects"]
             speed = bg_obj.get("speed")
 
             rect.x -= d_x * speed
             rect_r.x -= d_x * speed
             rect_l.x -= d_x * speed
 
-            rects = [rect, rect_r, rect_l]
-            for r in rects:
-                # left side
-                if r.x < -rect.w:
-                    r.x = rect.w - self.offset
+            if rect_l.x < -rect.w:
+                rect_l.x = rect_r.x + rect_r.w
+                bg_obj.get("rects").pop(0)
+                bg_obj.get("rects").append(rect_l)
 
-                # right side
-                if r.x > rect.w:
-                    r.x = -rect.w + self.offset
+            if rect_r.x > rect.w:
+                rect_r.x = rect_l.x - rect_r.w
+                bg_obj.get("rects").pop(-1)
+                bg_obj.get("rects").insert(0, rect_r)
 
         self.prev_cam_pos_x = camera_pos_x
 

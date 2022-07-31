@@ -9,7 +9,7 @@ from connection import update_data
 from other_player import OtherPlayer
 from player import Player
 from pytmx import util_pygame
-from settings import TILE_W, _screenHeight, _screenWidth
+from settings import TILE_H, TILE_W, _screenHeight, _screenWidth
 from tiles import Tile
 from utils.background import Background
 
@@ -71,10 +71,11 @@ class Level:
         self.tmx_data = util_pygame.load_pygame("./1.tmx")
         self.has_loaded = True
 
-        # print(self.tmx_data.get_layer_by_name("Background"))
-        self.bg_layer = self.tmx_data.get_layer_by_name("Background")
-
-        self.background = Background([self.bg_layer], [2])
+        # parallax background
+        bg_layer_names = ["bg_0", "bg_1"]
+        bg_layers = [self.tmx_data.get_layer_by_name(i) for i in bg_layer_names]
+        bg_layers_speeds = [layer.properties.get("speed") for layer in bg_layers]
+        self.background = Background(bg_layers, bg_layers_speeds)
 
         # os.chdir("./..")  # reseting the cwd
 
@@ -88,7 +89,8 @@ class Level:
 
         tiles_layer = self.tmx_data.get_layer_by_name("Tile Layer 1")
         for x, y, surf in tiles_layer.tiles():
-            pos = (x * surf.get_width(), y * surf.get_height())  # 16 by 16 tiles
+            # pos = (x * surf.get_width(), y * surf.get_height())  # 16 by 16 tiles
+            pos = (x * TILE_W, y * TILE_H)  # 16 by 16 tiles
             tile = Tile(pos, surf, self.tiles)
             self.tiles.add(tile)
 
@@ -156,8 +158,8 @@ class Level:
 
         # TODO NOTIFY OTHER PLAYER OF DEATH
         # CONDITIONAL STATEMENT TO CHECK IF PLAYER IS OUT-OF-BOUNDS IN Y-AXIS
-        if player.rect.y > _screenHeight:
-            return True
+        # if player.rect.y > _screenHeight:
+        #     return True
 
     def render(self):
         # background

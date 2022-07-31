@@ -27,7 +27,6 @@ class OtherPlayer(pygame.sprite.Sprite):
     def update(self):
         (frame_changed, animation_finished) = self.spritesheet.update()
         if frame_changed:
-            print("changed ! = ", self.spritesheet.animation_index)
             self.image = self.spritesheet.get_sprite()
 
         # self.fc += 1

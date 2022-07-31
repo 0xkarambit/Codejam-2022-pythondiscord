@@ -1,9 +1,6 @@
 import pygame
 from components.button import Button
 from components.text import Text
-from constants import HEIGHT, WIDTH
-
-# from settings import _screenHeight, _screenWidth
 from scenes.scene import Scene
 
 # kinda bad ? YEAHHH
@@ -17,11 +14,13 @@ class Menu(Scene):
         self.scene_ended = False
         self.buttons = []
 
+        w, h = pygame.display.get_window_size()
+
         # maybe make a btn dataclass later
         self.buttons = [
             Text(
                 "BugsLand",
-                WIDTH / 2 - 100,
+                w / 2 - 100,
                 100,
                 200,
                 50,
@@ -31,7 +30,7 @@ class Menu(Scene):
                 pygame.Color(223, 143, 45),
             ),
             Button(
-                WIDTH / 2 - 100,
+                w / 2 - 100,
                 200,
                 200,
                 50,
@@ -44,7 +43,7 @@ class Menu(Scene):
                 self.screen_surface,
             ),
             Button(
-                WIDTH / 2 - 100,
+                w / 2 - 100,
                 300,
                 200,
                 50,
@@ -56,7 +55,7 @@ class Menu(Scene):
                 self.screen_surface,
             ),
             Button(
-                WIDTH / 2 - 100,
+                w / 2 - 100,
                 400,
                 200,
                 50,
