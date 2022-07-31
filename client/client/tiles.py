@@ -1,5 +1,5 @@
 import pygame
-from constants import TILE_H, TILE_W
+from .constants import TILE_H, TILE_W
 
 
 class Tile(pygame.sprite.Sprite):

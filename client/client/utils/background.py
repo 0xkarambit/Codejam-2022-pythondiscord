@@ -1,5 +1,5 @@
 import pygame
-from constants import TILE_W
+from ..constants import TILE_W
 
 
 class Background:

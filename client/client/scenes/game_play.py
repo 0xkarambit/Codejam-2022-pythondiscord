@@ -1,7 +1,7 @@
 import pygame
-from components.button import Button
-from level import Level
-from scenes.scene import Scene
+from ..components.button import Button
+from ..level import Level
+from .scene import Scene
 
 
 class gamePlay(Scene):

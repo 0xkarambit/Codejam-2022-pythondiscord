@@ -1,7 +1,7 @@
 import pygame
-from components.button import Button
-from components.text import Text
-from scenes.scene import Scene
+from ..components.button import Button
+from ..components.text import Text
+from .scene import Scene
 
 # kinda bad ? YEAHHH
 pygame.font.init()

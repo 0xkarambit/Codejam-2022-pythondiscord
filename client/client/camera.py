@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 import pygame
-from constants import TILE_COUNT_X, TILE_COUNT_Y, TILE_H, TILE_W
+from .constants import TILE_COUNT_X, TILE_COUNT_Y, TILE_H, TILE_W
 
 MAP_W = TILE_COUNT_X * TILE_W
 MAP_H = TILE_COUNT_Y * TILE_H

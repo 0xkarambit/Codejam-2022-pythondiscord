@@ -3,10 +3,10 @@ import sys
 from pathlib import Path
 
 import pygame
-from constants import FPS, HEIGHT, WIDTH
-from scenes.menu import Menu
-from scenes.scene import Scene
-from scenes.scenes_manager import SCENES_MAP
+from .constants import FPS, HEIGHT, WIDTH
+from .scenes.menu import Menu
+from .scenes.scene import Scene
+from .scenes.scenes_manager import SCENES_MAP
 
 # Setting up the window
 pygame.font.init()

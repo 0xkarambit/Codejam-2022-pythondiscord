@@ -3,8 +3,8 @@ import threading
 
 import pygame
 import websockets
-from connection import authenticate, searching
-from scenes.scene import Scene
+from ..connection import authenticate, searching
+from .scene import Scene
 
 
 # socket = None

@@ -4,16 +4,16 @@ import threading
 from pathlib import Path
 import pygame
 import websockets
-from camera import Camera
-from components.breakable_tile import Breakable_tile
-from components.spikes import Spike
-from connection import update_data
-from constants import TILE_H, TILE_W
-from other_player import OtherPlayer
-from player import Player
+from .camera import Camera
+from .components.breakable_tile import Breakable_tile
+from .components.spikes import Spike
+from .connection import update_data
+from .constants import TILE_H, TILE_W
+from .other_player import OtherPlayer
+from .player import Player
 from pytmx import util_pygame
-from tiles import Tile
-from utils.background import Background
+from .tiles import Tile
+from .utils.background import Background
 
 other_player = {}
 
