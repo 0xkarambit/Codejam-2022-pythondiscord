@@ -1,0 +1,71 @@
+{
+	"frame_interval": 5,
+	"frame_w": 64,
+	"frame_h": 64,
+
+	"animations": [
+		"death_anim",
+		"run_anim",
+		"pushing_foward_anim",
+		"attack_anim",
+		"sword_attack_anim",
+		"idle_anim",
+		"jump_down_anim",
+		"jump_up_anim",
+		"hit_anim",
+		"jump_double_anim",
+		"before_or_after_jump_srip_2",
+		"effect_hit_sparkle_anim",
+		"effect_after_jump_dust_anim",
+		"effect_before_jump_dust_anim",
+		"effect_sword_effect_anim"
+	],
+
+	"death_anim": {
+		"frame_count": 8
+	},
+	"run_anim": {
+		"frame_count": 6
+	},
+	"pushing_foward_anim": {
+		"frame_count": 6
+	},
+	"attack_anim": {
+		"frame_count": 4
+	},
+	"sword_attack_anim": {
+		"frame_count": 4,
+		"frame_w": 128,
+		"frame_h": 64
+	},
+	"idle_anim": {
+		"frame_count": 4
+	},
+	"jump_down_anim": {
+		"frame_count": 3
+	},
+	"jump_up_anim": {
+		"frame_count": 3
+	},
+	"hit_anim": {
+		"frame_count": 3
+	},
+	"jump_double_anim": {
+		"frame_count": 3
+	},
+	"before_or_after_jump_srip_2": {
+		"frame_count": 2
+	},
+	"effect_hit_sparkle_anim": {
+		"frame_count": 4
+	},
+	"effect_after_jump_dust_anim": {
+		"frame_count": 4
+	},
+	"effect_before_jump_dust_anim": {
+		"frame_count": 4
+	},
+	"effect_sword_effect_anim": {
+		"frame_count": 3
+	}
+}
