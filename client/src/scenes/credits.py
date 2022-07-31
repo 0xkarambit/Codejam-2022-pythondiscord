@@ -17,6 +17,7 @@ developers = {
     "Ruthless": "https://github.com/nsk126",
     "TheLegendBeacon": "https://github.com/TheLegendBeacon",
 }
+keys = developers.keys()
 
 
 class Credits(Scene):
@@ -43,11 +44,11 @@ class Credits(Scene):
                 100,
                 200,
                 50,
-                list(developers.keys())[0],
+                keys[0],
                 50,
                 pygame.Color(255, 255, 255),
                 pygame.Color(105, 255, 105),
-                lambda: webbrowser.open(developers[list(developers.keys())[0]]),
+                lambda: webbrowser.open(developers[keys[0]]),
                 self.screen_surface,
             ),
             Button(
@@ -55,11 +56,11 @@ class Credits(Scene):
                 150,
                 200,
                 50,
-                list(developers.keys())[1],
+                keys[1],
                 50,
                 pygame.Color(255, 255, 255),
                 pygame.Color(105, 255, 105),
-                lambda: webbrowser.open(developers[list(developers.keys())[1]]),
+                lambda: webbrowser.open(developers[keys[1]]),
                 self.screen_surface,
             ),
             Button(
@@ -67,11 +68,11 @@ class Credits(Scene):
                 200,
                 200,
                 50,
-                list(developers.keys())[2],
+                keys[2],
                 50,
                 pygame.Color(255, 255, 255),
                 pygame.Color(105, 255, 105),
-                lambda: webbrowser.open(developers[list(developers.keys())[2]]),
+                lambda: webbrowser.open(developers[keys[2]]),
                 self.screen_surface,
             ),
             Button(
@@ -79,11 +80,11 @@ class Credits(Scene):
                 250,
                 200,
                 50,
-                list(developers.keys())[3],
+                keys[3],
                 50,
                 pygame.Color(255, 255, 255),
                 pygame.Color(105, 255, 105),
-                lambda: webbrowser.open(developers[list(developers.keys())[3]]),
+                lambda: webbrowser.open(developers[keys[3]]),
                 self.screen_surface,
             ),
             Button(
@@ -91,11 +92,11 @@ class Credits(Scene):
                 300,
                 200,
                 50,
-                list(developers.keys())[4],
+                keys[4],
                 50,
                 pygame.Color(255, 255, 255),
                 pygame.Color(105, 255, 105),
-                lambda: webbrowser.open(developers[list(developers.keys())[4]]),
+                lambda: webbrowser.open(developers[keys[4]]),
                 self.screen_surface,
             ),
             Button(
