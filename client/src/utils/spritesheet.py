@@ -153,8 +153,6 @@ class Spritesheet:
             # changing f_h if a special f_h has been defined for the row
             f_h = animation_data.get("frame_h", default_frame_h)
 
-            # pprint(animation_data)
-
             frames = []  # all sprites in this animation sequence
             inverted_frames = []
 
@@ -182,7 +180,6 @@ class Spritesheet:
             self.animations.setdefault(
                 animation_name + "_inverted", sprites_list_inverted_obj
             )
-            # print(f"\x1b[91m{animation_name}_inverted\x1b[0m")
 
             # reseting x to scan next row from the beginning and inc y to shift to next col of sprites
             x = 0

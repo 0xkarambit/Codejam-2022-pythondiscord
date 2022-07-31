@@ -54,7 +54,7 @@ class Loading_screen(Scene):
         bar_w = 10
 
         for _ in range(bars_count):
-            bar = pygame.Rect(bar_x, y - 5, bar_w, self.bar_h)
+            bar = pygame.Rect(bar_x, y - 3, bar_w, self.bar_h)
             bar_x += bar_w + bar_padding
             self.bars.append(bar)
 

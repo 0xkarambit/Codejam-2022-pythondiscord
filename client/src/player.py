@@ -1,6 +1,8 @@
+from pathlib import Path
+
 import pygame
 from utils.spritesheet import Spritesheet
-from pathlib import Path
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, spritesheet_path):
@@ -11,9 +13,6 @@ class Player(pygame.sprite.Sprite):
         self.image = self.spritesheet.get_sprite()
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect(topleft=pos)
-        # todo rm |  for development
-        # self.rect.w = 64
-        # self.rect.h = 64
 
         # PLAYER MOVEMENT
         self.default_speed = 8
@@ -29,6 +28,7 @@ class Player(pygame.sprite.Sprite):
         # possible states -> jump, run, idle, sprint ?
         # pos, dir, self.spritesheet.selected_animation
         self.is_dead = False
+        self.has_won = False
         # self.respawn_time = 30 # no of intervals so 30 * 10 = 300 frames game @ 60 fps so 5 Seconds roughly
         self.respawn_time = 5  # in seconds
 
@@ -37,9 +37,10 @@ class Player(pygame.sprite.Sprite):
         self.frames_interval = 10
         self.REVIVE_SIGNAL = pygame.USEREVENT + 1
 
-
         # Player SFX
-        self.jumpSFX = pygame.mixer.Sound(Path(__file__).resolve().parent.parent / "assets" / "Sounds" / "jump.wav") # SFX when jump
+        self.jumpSFX = pygame.mixer.Sound(
+            Path(__file__).resolve().parent.parent / "assets" / "Sounds" / "jump.wav"
+        )  # SFX when jump
         self.jumpSFX.set_volume(0.1)
 
     def death(self):
@@ -57,8 +58,6 @@ class Player(pygame.sprite.Sprite):
 
         self.rect.x = self.default_pos[0]
         self.rect.y = self.default_pos[1]
-        print()
-        print("THE PLAYER HAS RESPAWNED !")
         # self.rect.x = last_check_point_x
         # self.rect.y = last_check_point_y
 
@@ -156,8 +155,6 @@ class Player(pygame.sprite.Sprite):
     def update(self, events):
         # respawn counter
         for e in events:
-            print()
-            print(e.type)
             if e.type == self.REVIVE_SIGNAL:
                 self.respawn()
 
@@ -166,15 +163,9 @@ class Player(pygame.sprite.Sprite):
 
         # accept player input
         self.get_input()
-
-        # self.rect.x += self.direction.x * self.speed
-        # self.apply_gravity()
-
         (frame_changed, animation_finished) = self.spritesheet.update()
         if frame_changed:
             self.image = self.spritesheet.get_sprite()
-            # todo rm | for development
-            # self.image = pygame.transform.scale(self.image, (self.rect.w, self.rect.h))
 
         self.fc += 1
         # reseting speed to normal after sprinting

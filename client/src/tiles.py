@@ -8,5 +8,4 @@ class Tile(pygame.sprite.Sprite):
         self.image = surf
         self.image = pygame.transform.scale(self.image, (TILE_W, TILE_H))
         self.rect = self.image.get_rect(topleft=pos)
-        # print(pos)
         self.mask = pygame.mask.from_surface(self.image)

@@ -18,6 +18,8 @@ class OtherPlayer(pygame.sprite.Sprite):
         self.is_dead = False
 
     def render(self, surface, camera):
+        if self.is_dead:
+            return
         coor = pygame.Vector2(self.rect.x, self.rect.y)
         rel_coor = camera.get_relative_coors(coor)
 
@@ -25,6 +27,8 @@ class OtherPlayer(pygame.sprite.Sprite):
         surface.blit(self.image, rel_rect)
 
     def update(self):
+        if self.is_dead:
+            return
         (frame_changed, animation_finished) = self.spritesheet.update()
         if frame_changed:
             self.image = self.spritesheet.get_sprite()

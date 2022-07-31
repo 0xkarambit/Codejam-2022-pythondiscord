@@ -31,9 +31,6 @@ class Button:
         font = pygame.font.SysFont(None, font_size)
         t_w, t_h = font.size(text)  # text width , height
 
-        # if t_w > w:
-        #     print("ERROR: text doesn't fit inside the rect !")
-
         padding_x = (w - t_w) / 2
         padding_y = (h - t_h) / 2
 
@@ -54,7 +51,7 @@ class Button:
 
     def update(self, events_list):
         for event in events_list:
-            #getting mouse cords
+            # getting mouse cords
             x, y = pygame.mouse.get_pos()
             if self.rect.x < x and x < self.rect.x + self.rect.width:
                 if self.rect.y < y and y < self.rect.y + self.rect.height:

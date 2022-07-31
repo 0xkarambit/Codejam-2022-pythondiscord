@@ -6,24 +6,19 @@ from scenes.scene import Scene
 
 class gamePlay(Scene):
     def __init__(self, switch_scene):
-        # debug
-        print("Init Gameplay Screen")
-
-        # create screen and init clock
-        # self.screen = pygame.display.set_mode(_screenReso, pygame.RESIZABLE)
-        # self.screen = pygame.display.set_mode(_screenReso, pygame.SCALED)
-        # adding pygame.FULLSCREEN didnt work
-        # self.screen = pygame.display.set_mode(_screenReso)
 
         self.screen = pygame.display.get_surface()
         self.scene_ended = False
-
+        self.switch_scene = switch_scene
         self.level = Level(self.screen)
 
     def render(self):
         self.level.render()
 
     def update(self, events_list):
+        if self.level.complete:
+            self.switch_scene("Menu")
+            return
         # todo remove me i am for development
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
@@ -37,5 +32,4 @@ class gamePlay(Scene):
 
     def exit(self):
         self.scene_ended = True
-        print("Game scene Ending")
         return True

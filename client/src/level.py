@@ -1,14 +1,18 @@
 import asyncio
 import os
 import threading
+import time
 from pathlib import Path
+
 import pygame
 import websockets
 from camera import Camera
 from components.breakable_tile import Breakable_tile
 from components.spikes import Spike
+from components.text import Text
 from connection import update_data
 from constants import TILE_H, TILE_W
+from exit_door import Exit_door
 from other_player import OtherPlayer
 from player import Player
 from pytmx import util_pygame
@@ -16,18 +20,51 @@ from tiles import Tile
 from utils.background import Background
 
 other_player = {}
+msg = {}
+msg_timer = 10
+msg_rec_time = 0  # time at which the msg is received
 
 
 def update_other_player_data(data):
+    global msg
+    global msg_rec_time
     global other_player
-    # print("\x1b[94m")
-    # print("data", data)
+
     if data == []:
         print("No Data Received")
         return
     x, y, is_dead, anim = data[0]
-    # print([x, y, is_dead, anim])
-    # print("\x1b[0m")
+
+    w_w, w_h = pygame.display.get_window_size()
+    # if he was revived !
+    if other_player.is_dead and not is_dead:
+        msg = Text(
+            "Other Player Respawned !",
+            w_w - 700,
+            100,
+            10,
+            10,
+            pygame.display.get_surface(),
+            False,
+            24,
+            pygame.Color(0, 255, 0),
+        )
+        msg_rec_time = time.time()
+
+    # if he was kileld
+    elif not other_player.is_dead and is_dead:
+        msg = Text(
+            "Other Player has died !",
+            w_w - 700,
+            100,
+            10,
+            10,
+            pygame.display.get_surface(),
+            False,
+            24,
+            pygame.Color(255, 0, 0),
+        )
+        msg_rec_time = time.time()
 
     other_player.rect.x = x
     other_player.rect.y = y
@@ -56,21 +93,29 @@ class Level:
         # PROPS OF LEVEL CLASS
         self.display_surface = surface
         self.has_loaded = False
+        self.complete = False
         self.load_map()
         self.setup_level()
         self.init_all_entites()
         self.camera = Camera()
 
+        # for switching scene after winning
+        self.last_time = 0
+        self.scene_switching_time = 5
+
         self.player_contact = True
 
         # Player VERTICAL TOUCH SFX
-        self.landSFX = pygame.mixer.Sound(Path(__file__).resolve().parent.parent / "assets" / "Sounds" / "land.wav") # SFX when jump
-        
+        self.landSFX = pygame.mixer.Sound(
+            Path(__file__).resolve().parent.parent / "assets" / "Sounds" / "land.wav"
+        )  # SFX when jump
+
         # initialised using the map | ? if i declare them here they arnt global ? wtf
         # self.tiles = pygame.sprite.Group()
         # self.player = pygame.sprite.GroupSingle()
         # self.spikes = pygame.sprite.Group()
         # self.breakable_tiles = pygame.sprite.Group()
+        # self.exit_door = pygame.sprite.GroupSingle()
         # self.entities = [self.tiles, self.breakable_tiles]
 
     def reset(self):
@@ -108,21 +153,32 @@ class Level:
             tile = Tile(pos, surf, self.tiles)
             self.tiles.add(tile)
 
-        player_layer = self.tmx_data.get_layer_by_name("Player")
-        for obj in player_layer:
-            pos = (obj.x, obj.y)
-            path = obj.properties.get("spritesheet")
-            p = Player(pos, path)
-            self.player.add(p)
-            # OtherPlayer
-            other_player = OtherPlayer((0, 0), path)
-
-        self.init_all_entites()
-        self.entities = [self.spikes, self.breakable_tiles]
+        # player_layer = self.tmx_data.get_layer_by_name("Player")
+        # for obj in player_layer:
+        obj = self.tmx_data.get_object_by_id(2)  # start point object
+        pos = (obj.x, obj.y)
+        path = obj.properties.get("spritesheet")
+        p = Player(pos, path)
+        self.player.add(p)
+        # OtherPlayer
+        other_player = OtherPlayer((0, 0), path)
 
     def init_all_entites(self):
         self.init_spikes()
         self.init_breakable_tiles()
+        self.init_exit_door()
+
+        self.entities = [self.spikes, self.breakable_tiles, self.exit_door]
+        # init escape door
+
+    def init_exit_door(self):
+        self.exit_door = pygame.sprite.GroupSingle()
+        obj = self.tmx_data.get_object_by_id(3)  # start point object
+        pos = (obj.x * 2, obj.y * 2)
+        print("pos is ", {"pos": pos})
+        path = obj.properties.get("sprite")
+        surf = pygame.image.load(path).convert_alpha()
+        Exit_door(pos, surf, self.exit_door)
 
     def init_spikes(self):
         self.spikes = pygame.sprite.Group()
@@ -176,7 +232,7 @@ class Level:
                     player.jump_limit = 0
                     player.in_air_after_jump = False
                     player.spritesheet.unlock_animation()
-                    
+
                     # PLAY SFX
                     if self.player_contact == True:
                         self.landSFX.play()
@@ -185,7 +241,7 @@ class Level:
                 elif player.direction.y < 0:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
-                    
+
                     # PLAY SFX
                     if self.player_contact == True:
                         self.landSFX.play()
@@ -194,17 +250,18 @@ class Level:
             elif abs(player.direction.y) > 2:
                 self.player_contact = True
 
-
     # CLASS METHOD FOR DEATH AND RESPAWN
     def death(self):
         player = self.player.sprite
 
         # TODO NOTIFY OTHER PLAYER OF DEATH
         # CONDITIONAL STATEMENT TO CHECK IF PLAYER IS OUT-OF-BOUNDS IN Y-AXIS
-        # if player.rect.y > _screenHeight:
-        #     return True
+        if player.rect.y > 1500:
+            return True
 
     def render(self):
+        if self.complete:
+            return
         # background
         self.background.render(self.display_surface)
 
@@ -233,7 +290,36 @@ class Level:
             for item in grp:
                 item.render(self.display_surface, self.camera, self.player.sprite)
 
+        # messages
+        if msg_rec_time != 0:
+            msg.render()
+
     def update(self, events_list):
+        if self.player.sprite.has_won:
+            if time.time() - self.last_time > self.scene_switching_time:
+                self.complete = True
+                return
+        # if the player has won !
+        w_w, w_h = pygame.display.get_window_size()
+        global msg_rec_time
+        global msg_timer
+        global msg
+        if self.player.sprite.has_won and not self.complete:
+            # self.player.sprite.has_won = False
+            self.last_time = time.time()
+            self.timer_setup = True
+            msg = Text(
+                "You Won !",
+                w_w / 2,
+                w_h / 2,
+                10,
+                10,
+                pygame.display.get_surface(),
+                False,
+                70,
+                pygame.Color(0, 0, 255),
+            )
+            return
 
         # Background
         self.background.update(self.camera.pos.x)
@@ -258,3 +344,7 @@ class Level:
         )
         self.thread.daemon = True
         self.thread.start()
+
+        if msg_rec_time != 0 and time.time() - msg_rec_time > msg_timer:
+            msg.text = ""
+            msg_rec_time = 0
