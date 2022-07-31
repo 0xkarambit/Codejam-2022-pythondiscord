@@ -5,7 +5,6 @@ import pygame
 import websockets
 from connection import authenticate, searching
 from scenes.scene import Scene
-from settings import _screenHeight, _screenWidth
 
 
 # socket = None

@@ -15,17 +15,16 @@ class Player(pygame.sprite.Sprite):
         # self.rect.h = 64
 
         # PLAYER MOVEMENT
-        self.default_speed = 5
+        self.default_speed = 8
         self.speed = self.default_speed
-        self.sprint_speed = self.speed * 1.5
+        self.sprint_speed = self.speed * 2
         self.direction = pygame.math.Vector2(0, 0)
         self.gravity = 0.4  # 0.8
-        self.jump_speed = -7
+        self.jump_speed = -9
         self.jump_limit = 0
         self.in_air_after_jump = False
         self.last_direction = 1
         self.state = "idle"
-        self.state_locked = False
         # possible states -> jump, run, idle, sprint ?
         # pos, dir, self.spritesheet.selected_animation
         self.is_dead = False
@@ -34,11 +33,6 @@ class Player(pygame.sprite.Sprite):
         self.fc = 0
         self.frames_interval = 10
 
-    def set_state(self, state, *, force=False, lock=False):
-        if not self.state_locked or force == True:
-            self.state = state
-        self.state_locked = lock
-
     def reset_speed(self):
         self.speed = self.default_speed
 
@@ -46,6 +40,7 @@ class Player(pygame.sprite.Sprite):
         self.speed = self.sprint_speed
         self.spritesheet.select_animation("pushing_foward_anim")
         self.spritesheet.queue_animation("idle_anim")
+        self.state = "sprinting"
 
     def get_input(self):
         keys = pygame.key.get_pressed()
@@ -54,20 +49,20 @@ class Player(pygame.sprite.Sprite):
             self.direction.x = 1
             self.last_direction = 1
             self.spritesheet.select_animation("run_anim")
-            self.set_state("run")  # todo rm me
+            # self.set_state("run")  # todo rm me
 
         elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.direction.x = -1
             self.last_direction = -1
             self.spritesheet.select_animation("run_anim", True)
-            self.set_state("run")  # todo rm me
+            # self.set_state("run")  # todo rm me
 
         else:
             self.direction.x = 0
             if not self.in_air_after_jump:
                 inverted = self.last_direction == -1
                 self.spritesheet.select_animation("idle_anim", inverted)
-                self.set_state("idle")  # todo rm me
+                # self.set_state("idle")  # todo rm me
 
         if keys[pygame.K_UP] or keys[pygame.K_SPACE] or keys[pygame.K_w]:
             if self.jump_limit < 12:

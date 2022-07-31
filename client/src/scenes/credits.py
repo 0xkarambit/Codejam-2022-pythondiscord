@@ -1,10 +1,9 @@
-import pygame
 import random
+
+import pygame
 from components.button import Button
 from components.text import Text
 from constants import HEIGHT, WIDTH
-
-# from settings import _screenHeight, _screenWidth
 from scenes.scene import Scene
 
 # kinda bad ? YEAHHH
@@ -14,6 +13,7 @@ developers = ["Nihal Navath", "Karambit", "DarkDragon", "Ruthless", "TheLegendBe
 random.shuffle(developers)
 devs_text = "\n".join(list(developers))
 credits_text = devs_text
+
 
 class Credits(Scene):
     def __init__(self, switch_scene):
@@ -43,7 +43,7 @@ class Credits(Scene):
                 self.screen_surface,
                 True,
                 50,
-                pygame.Color(105,255,105),
+                pygame.Color(105, 255, 105),
             ),
             Button(
                 WIDTH / 2 - 400,
@@ -56,7 +56,7 @@ class Credits(Scene):
                 pygame.Color(223, 143, 45),
                 lambda: switch_scene("Menu"),
                 self.screen_surface,
-            )
+            ),
         ]
 
     def render(self):

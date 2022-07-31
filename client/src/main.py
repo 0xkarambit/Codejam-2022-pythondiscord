@@ -3,7 +3,6 @@ from pathlib import Path
 
 import pygame
 from constants import FPS, HEIGHT, WIDTH
-from scenes.game_play import gamePlay
 from scenes.menu import Menu
 from scenes.scene import Scene
 from scenes.scenes_manager import SCENES_MAP

@@ -32,7 +32,7 @@ class gamePlay(Scene):
         # todo remove me i am for development
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
-            pygame.exit()
+            pygame.quit()
             quit()
 
         self.level.update(events_list)

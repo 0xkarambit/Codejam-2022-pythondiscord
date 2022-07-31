@@ -49,7 +49,7 @@ class Background:
                 bg_obj.get("rects").append(rect_l)
 
             if rect_r.x > rect.w:
-                rect_r.x = rect_l.x - rect_r.w
+                rect_r.x = rect_l.x - rect_l.w
                 bg_obj.get("rects").pop(-1)
                 bg_obj.get("rects").insert(0, rect_r)
 

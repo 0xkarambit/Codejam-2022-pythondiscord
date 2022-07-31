@@ -6,10 +6,10 @@ import pygame
 import websockets
 from camera import Camera
 from connection import update_data
+from constants import TILE_H, TILE_W
 from other_player import OtherPlayer
 from player import Player
 from pytmx import util_pygame
-from settings import TILE_H, TILE_W, _screenHeight, _screenWidth
 from tiles import Tile
 from utils.background import Background
 
@@ -72,7 +72,7 @@ class Level:
         self.has_loaded = True
 
         # parallax background
-        bg_layer_names = ["bg_0", "bg_1"]
+        bg_layer_names = ["bg_0", "bg_1"]  # +bg_2
         bg_layers = [self.tmx_data.get_layer_by_name(i) for i in bg_layer_names]
         bg_layers_speeds = [layer.properties.get("speed") for layer in bg_layers]
         self.background = Background(bg_layers, bg_layers_speeds)

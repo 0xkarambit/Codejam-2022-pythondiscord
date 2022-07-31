@@ -1,7 +1,7 @@
 {
 	"frame_interval": 5,
-	"frame_w": 16,
-	"frame_h": 16,
+	"frame_w": 64,
+	"frame_h": 64,
 
 	"animations": [
 		"death_anim",
@@ -35,8 +35,8 @@
 	},
 	"sword_attack_anim": {
 		"frame_count": 4,
-		"frame_w": 32,
-		"frame_h": 16
+		"frame_w": 128,
+		"frame_h": 64
 	},
 	"idle_anim": {
 		"frame_count": 4
