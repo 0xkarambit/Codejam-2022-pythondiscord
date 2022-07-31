@@ -144,18 +144,21 @@ class Player(pygame.sprite.Sprite):
         self.jump_limit += 1
 
     def update(self, events):
-        if self.is_dead:
-            return
-        self.get_input()
-        # self.rect.x += self.direction.x * self.speed
-        # self.apply_gravity()
-
         # respawn counter
         for e in events:
             print()
             print(e.type)
             if e.type == self.REVIVE_SIGNAL:
                 self.respawn()
+
+        if self.is_dead:
+            return
+
+        # accept player input
+        self.get_input()
+
+        # self.rect.x += self.direction.x * self.speed
+        # self.apply_gravity()
 
         (frame_changed, animation_finished) = self.spritesheet.update()
         if frame_changed:

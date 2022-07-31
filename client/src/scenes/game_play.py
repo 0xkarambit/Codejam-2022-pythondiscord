@@ -25,11 +25,6 @@ class gamePlay(Scene):
 
     def update(self, events_list):
         # todo remove me i am for development
-        for i in events_list:
-            if i.type == pygame.KEYDOWN:
-                if i.unicode == "c":
-                    self.level.camera.draw_distance.x += 1 * 32
-        # todo remove me i am for development
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
             pygame.quit()

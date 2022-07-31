@@ -15,9 +15,6 @@ class Breakable_tile(pygame.sprite.Sprite):
     def update(self, events, player):
         if self.rect.colliderect(player.rect):
             self.group.remove(self)  # deletes the tile !!!
-        self.vertical_movement_collision(
-            player
-        )  # tiles dont break when u stand on them
 
     def render(self, surface, camera, player):
         pos = pygame.Vector2(self.rect.x, self.rect.y)
@@ -29,22 +26,3 @@ class Breakable_tile(pygame.sprite.Sprite):
     def horizontal_movement_collision(self, player):
         if self.rect.colliderect(player.rect):
             self.group.remove(self)  # deletes the tile !!!
-            # if player.direction.x < 0:
-            #     player.rect.left = self.rect.right
-
-            # elif player.direction.x > 0:
-            #     player.rect.right = self.rect.left
-
-    def vertical_movement_collision(self, player):
-        if self.rect.colliderect(player.rect):
-            if player.direction.y > 0:
-                # player.rect.bottom = self.rect.top
-                # player.direction.y = 0
-                player.jump_limit = 0
-                player.in_air_after_jump = False
-                player.spritesheet.unlock_animation()
-
-            self.group.remove(self)  # deletes the tile !!!
-
-            # player.rect.top = self.rect.bottom
-            # player.direction.y = 0
