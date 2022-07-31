@@ -7,6 +7,11 @@ from scenes.scene import Scene
 pygame.font.init()
 
 
+def exit_game():
+    pygame.quit()
+    quit()
+
+
 class Menu(Scene):
     def __init__(self, switch_scene):
         print("Menu scene started")
@@ -64,6 +69,18 @@ class Menu(Scene):
                 pygame.Color(123, 243, 145),
                 pygame.Color(223, 143, 45),
                 lambda: switch_scene("Credits"),
+                self.screen_surface,
+            ),
+            Button(
+                w / 2 - 100,
+                500,
+                200,
+                50,
+                "Exit",
+                48,
+                pygame.Color(123, 243, 145),
+                pygame.Color(223, 143, 45),
+                lambda: exit_game(),
                 self.screen_surface,
             ),
         ]

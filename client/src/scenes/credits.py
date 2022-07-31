@@ -4,7 +4,6 @@ import webbrowser
 import pygame
 from components.button import Button
 from components.text import Text
-from constants import HEIGHT, WIDTH
 from scenes.scene import Scene
 
 # kinda bad ? YEAHHH
@@ -25,12 +24,13 @@ class Credits(Scene):
         self.screen_surface = pygame.display.get_surface()
         self.scene_ended = False
         self.buttons = []
+        window_w, _ = pygame.display.get_window_size()
 
         # maybe make a btn dataclass later
         self.buttons = [
             Text(
                 "Developers",
-                WIDTH / 2 - 90,
+                window_w / 2 - 105,
                 30,
                 200,
                 50,
@@ -40,9 +40,9 @@ class Credits(Scene):
                 pygame.Color(223, 143, 45),
             ),
             Button(
-                WIDTH / 2 + 350,
+                window_w / 2 - 110,
                 100,
-                200,
+                220,
                 50,
                 keys[0],
                 50,
@@ -52,7 +52,7 @@ class Credits(Scene):
                 self.screen_surface,
             ),
             Button(
-                WIDTH / 2 + 350,
+                window_w / 2 - 100,
                 150,
                 200,
                 50,
@@ -64,7 +64,7 @@ class Credits(Scene):
                 self.screen_surface,
             ),
             Button(
-                WIDTH / 2 + 350,
+                window_w / 2 - 100,
                 200,
                 200,
                 50,
@@ -76,7 +76,7 @@ class Credits(Scene):
                 self.screen_surface,
             ),
             Button(
-                WIDTH / 2 + 350,
+                window_w / 2 - 100,
                 250,
                 200,
                 50,
@@ -88,9 +88,9 @@ class Credits(Scene):
                 self.screen_surface,
             ),
             Button(
-                WIDTH / 2 + 350,
+                window_w / 2 - 145,
                 300,
-                200,
+                300,
                 50,
                 keys[4],
                 50,
@@ -100,7 +100,7 @@ class Credits(Scene):
                 self.screen_surface,
             ),
             Button(
-                WIDTH / 2 - 400,
+                window_w / 2 - 400,
                 30,
                 200,
                 50,

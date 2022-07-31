@@ -1,7 +1,6 @@
 import pygame
 from components.button import Button
 from components.text import Text
-from constants import HEIGHT, WIDTH
 from scenes.scene import Scene
 
 # kinda bad ? YEAHHH
@@ -13,12 +12,13 @@ class About(Scene):
         self.screen_surface = pygame.display.get_surface()
         self.scene_ended = False
         self.buttons = []
+        window_w, _ = pygame.display.get_window_size()
 
         # maybe make a btn dataclass later
         self.buttons = [
             Text(
                 "About",
-                WIDTH / 2 - 100,
+                window_w / 2 - 100,
                 30,
                 200,
                 50,
@@ -29,7 +29,7 @@ class About(Scene):
             ),
             Text(
                 "Game made for python discord game jam",
-                WIDTH / 2 - 100,
+                window_w / 2 - 100,
                 100,
                 200,
                 50,
@@ -39,7 +39,7 @@ class About(Scene):
                 pygame.Color(223, 143, 45),
             ),
             Button(
-                WIDTH / 2 - 400,
+                window_w / 2 - 400,
                 30,
                 200,
                 50,
