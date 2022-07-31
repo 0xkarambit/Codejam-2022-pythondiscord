@@ -1,4 +1,5 @@
 import random
+import webbrowser
 
 import pygame
 from components.button import Button
@@ -9,10 +10,13 @@ from scenes.scene import Scene
 # kinda bad ? YEAHHH
 pygame.font.init()
 
-developers = ["Nihal Navath", "Karambit", "DarkDragon", "Ruthless", "TheLegendBeacon"]
-random.shuffle(developers)
-devs_text = "\n".join(list(developers))
-credits_text = devs_text
+developers = {
+    "Nihal Navath": "https://github.com/NihalNavath",
+    "Karambit": "https://github.com/HarshitJoshi9152",
+    "DarkDragon": "https://github.com/Arghya-AB",
+    "Ruthless": "https://github.com/nsk126",
+    "TheLegendBeacon": "https://github.com/TheLegendBeacon",
+}
 
 
 class Credits(Scene):
@@ -34,16 +38,65 @@ class Credits(Scene):
                 70,
                 pygame.Color(223, 143, 45),
             ),
-            Text(
-                credits_text,
+            Button(
                 WIDTH / 2 + 350,
                 100,
                 200,
                 50,
-                self.screen_surface,
-                True,
+                list(developers.keys())[0],
                 50,
+                pygame.Color(255, 255, 255),
                 pygame.Color(105, 255, 105),
+                lambda: webbrowser.open(developers[list(developers.keys())[0]]),
+                self.screen_surface,
+            ),
+            Button(
+                WIDTH / 2 + 350,
+                150,
+                200,
+                50,
+                list(developers.keys())[1],
+                50,
+                pygame.Color(255, 255, 255),
+                pygame.Color(105, 255, 105),
+                lambda: webbrowser.open(developers[list(developers.keys())[1]]),
+                self.screen_surface,
+            ),
+            Button(
+                WIDTH / 2 + 350,
+                200,
+                200,
+                50,
+                list(developers.keys())[2],
+                50,
+                pygame.Color(255, 255, 255),
+                pygame.Color(105, 255, 105),
+                lambda: webbrowser.open(developers[list(developers.keys())[2]]),
+                self.screen_surface,
+            ),
+            Button(
+                WIDTH / 2 + 350,
+                250,
+                200,
+                50,
+                list(developers.keys())[3],
+                50,
+                pygame.Color(255, 255, 255),
+                pygame.Color(105, 255, 105),
+                lambda: webbrowser.open(developers[list(developers.keys())[3]]),
+                self.screen_surface,
+            ),
+            Button(
+                WIDTH / 2 + 350,
+                300,
+                200,
+                50,
+                list(developers.keys())[4],
+                50,
+                pygame.Color(255, 255, 255),
+                pygame.Color(105, 255, 105),
+                lambda: webbrowser.open(developers[list(developers.keys())[4]]),
+                self.screen_surface,
             ),
             Button(
                 WIDTH / 2 - 400,
