@@ -1,20 +1,38 @@
-# Bugsland - A Python Discord Code Jam submission 
+# BugsLand
 
-## How do I play?
-1. One player needs to host the server by running `server.py`.
-2. Other players can connect by running the client script `main.py` in the `client\src\` folder.
-3. Use poetry to install dependencies.
+Python Code Jam 9 submission by Wily Werewolves.
 
-```
-poetry install
-poetry run python server/server.py
-poetry run python client/src/main.py
-```
+# Introduction
 
-## Game objectives
-### You finish the game by navigating through all obstacles and fining the concealing exit.
+Bugsland is a 2 player coop experience, the players together traverse bugsland a world full of bugs, encountering and using the bugs in the world to their advantage to complete this platformer !
 
-## Controls
-1. Navigate Left & Right by pressing A or ← key and D or → key.
-2. Jump using Space or ↑.
-3. You can also double jump by pressing Space or ↑ consecutively.
+# Controls
+
+1. Use either arrow keys or WASD to move around.
+2. Tap W key twice to double jump
+3. Use the shift key to sprint
+4. To win the game make it to the end of the level and pass through the door
+
+# Setting up the game
+
+In order to run the game we need a server running and 2 clients to connect to the server
+
+## Game Server
+
+cd ./server/src
+poetry run python server.py
+
+
+## Game Client
+
+cd ./client/src
+poetry run python main.py
+
+
+# Contributors
+
+1. [Karambit](https://github.com/HarshitJoshi915)
+2. [Nihal](https://github.com/NihalNavath)
+3. [Ruthless](https://github.com/nsk126)
+4. [DarkDragon](https://github.com/Arghya-AB)
+5. [TheLegendBeacon](https://github.com/TheLegendBeacon)
