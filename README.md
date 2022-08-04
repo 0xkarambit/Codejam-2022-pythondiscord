@@ -18,16 +18,16 @@ Bugsland is a 2 player coop experience, the players together traverse bugsland a
 In order to run the game we need a server running and 2 clients to connect to the server
 
 ## Game Server
-
+```
 cd ./server/src
 poetry run python server.py
-
+```
 
 ## Game Client
-
+```
 cd ./client/src
 poetry run python main.py
-
+```
 
 # Contributors
 
